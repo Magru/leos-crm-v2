@@ -1,8 +1,10 @@
 {
-    "name": "LeosCRM.v2",
+    "name": "leos/crm",
     "type": "project",
     "description": "Leos CRM",
-    "keywords": [],
+    "keywords": [
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0",

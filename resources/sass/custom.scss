@@ -1,0 +1,126 @@
+body{
+    font-family: 'Open Sans', sans-serif!important;
+    direction: rtl;
+}
+.btn{
+    line-height: 16px;
+}
+.wrapper .page-wrap .main-content .page-header .page-header-title i{
+    margin-right: 0;
+    margin-left: 20px;
+}
+.form-group{
+    text-align: right;
+}
+.wrapper .page-wrap .app-sidebar.colored .sidebar-header{
+    display: flex;
+    justify-content: flex-end;
+}
+.wrapper .page-wrap .app-sidebar .sidebar-header .header-brand .logo-img{
+    width: 116px;
+}
+.wrapper .page-wrap .main-content .card .card-body .sub-title{
+    text-align: right;
+    direction: rtl;
+}
+.repeater-add-btn, .repeater-remove-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 37px;
+    height: 37px;
+}
+.input-group > .input-group-prepend > .input-group-text{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-group .input-group-prepend .input-group-text{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    height: 37.03px;
+}
+.input-group > .form-control:not(:first-child){
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+select.form-control{
+    background-position: center left 15px;
+}
+.card{
+    height: 100%;
+}
+.card .card-body .dataTables_wrapper .dataTable{
+    width: 100%;
+}
+#clients-table{
+    direction: rtl;
+    td, th {text-align: right; direction: rtl;}
+}
+table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting{
+    padding-right: 10px;
+    padding-left: 30px;
+}
+table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before{
+    right: auto;
+    left: 1em;
+    top: 9px;
+}
+table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after{
+    right: auto;
+    left: 0.5em;
+    top: 9px;
+}
+.a-rank{
+    background-color: rgba(#38c172, .3);
+}
+.profiletimeline{
+    .sl-right{
+        direction: rtl;
+        text-align: right;
+    }
+}
+.my-mail{
+    position: relative;
+    &:after{
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 5px;
+        height: 100%;
+        background: green;
+    }
+}
+.full-window-modal{
+    .modal-dialog{
+        left: 3%;
+        right: 2%;
+        top: 2%;
+        max-width: 95%;
+        max-height: 92%;
+    }
+}
+.full-window-modal .modal-dialog .modal-content{
+    height: 95vh;
+}
+.canceled_call{
+    border-right: 2px solid red;
+}
+.latest-update-card .card-block .latest-update-box:after{
+    left: auto;
+    right: 19px;
+}
+.latest-update-card .card-block .latest-update-box .update-meta .update-icon{
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    padding-top: 9px;
+}
+.latest-update-card .card-block .latest-update-box .update-meta i.update-icon {
+    margin-left: 2px;
+    margin-right: 9px;
+}
+.card .card-header .card-header-right{
+    right: auto;
+    left: 10px;
+}

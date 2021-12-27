@@ -140,7 +140,7 @@ class ConversationController extends Controller
 
 
         $list = $gmail->users_messages->listUsersMessages($user, [
-            'maxResults' => 1000,
+            'maxResults' => 5000,
             'q' => 'from:(' . $clientMail . ')'
         ]);
 

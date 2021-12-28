@@ -42,13 +42,31 @@
                 </div>
 
                 <div
+                    class="nav-item {{ ($segment1 == 'products') ? 'active open' : '' }} has-sub">
+                    <a href="#">
+                        <span>מוצרים</span>
+                        <i class="ik ik-briefcase"></i>
+                    </a>
+                    <div class="submenu-content">
+                        @can('manage_product')
+                            <a href="{{ URL::route('product.create') }}"
+                               class="menu-item {{ ($segment1 == 'create-product') ? 'active' : '' }}">הוסף מוצר חדש</a>
+                        @endcan
+                        @can('view_client_data')
+                            <a href="{{url('clients/index')}}"
+                               class="menu-item {{ ($segment1 == 'index') ? 'active' : '' }}">רשימת לקוחות</a>
+                        @endcan
+                    </div>
+                </div>
+
+
+                <div
                     class="nav-item {{ ($segment1 == 'users' || $segment1 == 'roles'||$segment1 == 'permission' ||$segment1 == 'user') ? 'active open' : '' }} has-sub">
                     <a href="#">
                         <span>מנהל מערכת</span>
                         <i class="ik ik-user"></i>
                     </a>
                     <div class="submenu-content">
-                        <!-- only those have manage_user permission will get access -->
                         @can('manage_user')
                             <a href="{{url('users')}}"
                                class="menu-item {{ ($segment1 == 'users') ? 'active' : '' }}">משתשמים</a>
@@ -56,12 +74,10 @@
                                class="menu-item {{ ($segment1 == 'user' && $segment2 == 'create') ? 'active' : '' }}">משתמש
                                 חדש</a>
                         @endcan
-                    <!-- only those have manage_role permission will get access -->
                         @can('manage_roles')
                             <a href="{{url('roles')}}"
                                class="menu-item {{ ($segment1 == 'roles') ? 'active' : '' }}">תפקידים</a>
                         @endcan
-                    <!-- only those have manage_permission permission will get access -->
                         @can('manage_permission')
                             <a href="{{url('permission')}}"
                                class="menu-item {{ ($segment1 == 'permission') ? 'active' : '' }}">הרשאות</a>

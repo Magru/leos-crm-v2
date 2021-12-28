@@ -1,4 +1,4 @@
-@extends('layouts.main') 
+@extends('layouts.main')
 @section('title', 'Form Advance')
 @section('content')
     <!-- push external head elements to head -->
@@ -581,7 +581,7 @@
             </div>
         </div>
 
-        
+
     </div>
 
     <!-- push external js -->
@@ -591,8 +591,8 @@
         <script src="{{ asset('plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
         <script src="{{ asset('plugins/jquery.repeater/jquery.repeater.min.js') }}"></script>
         <script src="{{ asset('plugins/mohithg-switchery/dist/switchery.min.js') }}"></script>
-      
+
         <script src="{{ asset('js/form-advanced.js') }}"></script>
     @endpush
 @endsection
-    
+

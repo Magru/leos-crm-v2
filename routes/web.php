@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DealController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TimelineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -60,6 +61,11 @@ Route::group(['middleware' => 'auth'], function(){
 
         Route::post('clients/add-client', [ClientController::class,'store'])->name('store-client');
         Route::post('clients/store-media', [ClientController::class,'storeMedia'])->name('store-client-media');
+    });
+
+    Route::group(['middleware' => 'can:manage_product'], function(){
+        Route::get('product/create', [ProductController::class,'create'])->name('product.create');
+        Route::post('product/store', [ProductController::class,'store'])->name('product.store');
     });
 
     Route::group(['middleware' => 'can:view_client_data'], function(){

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Deal;
 use Google_Client;
 use Google_Service_Gmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DealController extends Controller{
 
@@ -40,29 +43,31 @@ class DealController extends Controller{
         ]);
 
         try {
-            while ($list->getMessages() != null) {
+            foreach ($list->getMessages() as $count => $message) {
 
-                foreach ($list->getMessages() as $count => $message) {
+                $message_id = $message->id;
+                $optParamsGet2['format'] = 'full';
+                $single_message = $gmail->users_messages->get($user_mail, $message_id, $optParamsGet2);
 
-                    $message_id = $message->id;
-                    $optParamsGet2['format'] = 'full';
-                    $single_message = $gmail->users_messages->get($user_mail, $message_id, $optParamsGet2);
+                $files = $this->getAttachments($message_id, $single_message->getPayload()->parts, $gmail);
+                $deal = new Deal();
 
-                    $files = $this->getAttachments($message_id, $single_message->getPayload()->parts, $gmail);
-                    //dd($attachments);
+                if(!empty($files)) {
+                    foreach ($files as $key => $value) {
+                        $image_64 = $value['data']; //your base64 encoded data
+                        $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal_files');
 
-                    if(!empty($files)) {
-                        foreach ($files as $key => $value) {
-                            echo '<a target="_blank" href="attachment.php?messageId='.$message_id.'&part_id='.$value.'">Attachment '.($key+1).'</a><br/>';
-                        }
                     }
-
-
                 }
+                $deal->save();
+
+
             }
         }catch (Exception $e) {
             echo $e->getMessage();
         }
+
+        dd($deal);
     }
 
     private function missingServiceAccountDetailsWarning(){

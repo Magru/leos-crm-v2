@@ -11,7 +11,9 @@ class ProductController extends Controller{
     public function index(){
 
         $products = Product::all();
-        return view('product.index', ['products' => $products]);
+        return view('product.index', [
+            'products' => $products
+        ]);
 
     }
 
@@ -31,10 +33,12 @@ class ProductController extends Controller{
         $data = null;
         if($product_data){
             foreach ($product_data as $_d){
-                $data[] = [
-                    'title' => $_d['data-name'],
-                    'type' => $_d['data-type']
-                ];
+                if(isset($_d['data-name']) && isset($_d['data-type'])){
+                    $data[] = [
+                        'title' => $_d['data-name'],
+                        'type' => $_d['data-type']
+                    ];
+                }
             }
         }
 

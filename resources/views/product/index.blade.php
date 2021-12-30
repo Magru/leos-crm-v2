@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'לקוחות')
+@section('title', 'מוצרים')
 @section('content')
 
     <div class="container-fluid">
@@ -28,6 +28,7 @@
                                     <tr>
                                         <th>כותרת</th>
                                         <th>תאריך יצירה במערכת</th>
+                                        <th>שדות</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -36,6 +37,15 @@
                                         <tr>
                                             <td>{{ $_prod->name }}</td>
                                             <td>{{ date('d/m/Y', strtotime($_prod->created_at)) }}</td>
+                                            <td>
+                                                @if($_prod->data != 'null')
+                                                @foreach (json_decode($_prod->data, true) as $dat)
+                                                    <span class="badge badge-pill badge-secondary">
+                                                        {{ $dat['title'] }}
+                                                    </span>
+                                                @endforeach
+                                                @endif
+                                            </td>
                                             <td>
 
                                                 <button type="button" class="btn btn-secondary"

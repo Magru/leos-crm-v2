@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Radmin'),
+    'name' => env('APP_NAME', 'Leos CRM'),
+    'version' => env('APP_VERSION', '0.0.1'),
+
 
     /*
     |--------------------------------------------------------------------------

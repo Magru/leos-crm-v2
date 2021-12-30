@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('product/store', [ProductController::class,'store'])->name('product.store');
     });
 
+    Route::get('product/index', [ProductController::class,'index'])->name('product.index');
+
     Route::group(['middleware' => 'can:view_client_data'], function(){
         Route::get('clients/index', [ClientController::class,'index'])->name('client-index');
         Route::get('clients/show/{id}', [ClientController::class,'show'])->name('client-show');

@@ -573,6 +573,17 @@ $(document).ready(function() {
 
 
     $('#clients-table').DataTable({
+        "language": {
+            "lengthMenu": "הצג _MENU_ רשומות",
+            "search": "חיפוש:",
+            "info":  "מציג _START_ עד _END_ מ-_TOTAL_ תוצאות",
+            "paginate": {
+                "first":      "ראשון",
+                "last":       "אחרון",
+                "next":       "הבא",
+                "previous":   "קודם"
+            },
+        },
         initComplete: function() {
             this.api().columns().every(function() {
                 var column = this;

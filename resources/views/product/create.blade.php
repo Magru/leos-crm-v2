@@ -43,7 +43,7 @@
                                 <div class="card-header"><h3>פרטי מוצר</h3></div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <div data-repeater-list="contact-persons" class="pl-3">
+                                        <div data-repeater-list="product-data" class="pl-3">
                                             <div data-repeater-item class="d-flex mb-2">
                                                 <div class="form-group mb-2 mr-sm-2 mb-sm-0">
                                                     <input type="text" class="form-control" name="data-name"
@@ -55,7 +55,7 @@
                                                         <option value="date">תאריך</option>
                                                         <option value="text">טקסט</option>
                                                         <option value="money">כסף</option>
-{{--                                                        <option value="number">מספר</option>--}}
+                                                        <option value="number">מספר</option>
                                                     </select>
                                                 </div>
                                                 <button data-repeater-delete type="button"

@@ -52,10 +52,8 @@
                             <a href="{{ URL::route('product.create') }}"
                                class="menu-item {{ ($segment1 == 'create-product') ? 'active' : '' }}">הוסף מוצר חדש</a>
                         @endcan
-                        @can('view_client_data')
-                            <a href="{{url('clients/index')}}"
-                               class="menu-item {{ ($segment1 == 'index') ? 'active' : '' }}">רשימת לקוחות</a>
-                        @endcan
+                            <a href="{{ URL::route('product.index') }}"
+                               class="menu-item {{ ($segment1 == 'index') ? 'active' : '' }}">רשימת מוצרים</a>
                     </div>
                 </div>
 

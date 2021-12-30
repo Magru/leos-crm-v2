@@ -124,3 +124,17 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     right: auto;
     left: 10px;
 }
+select.form-control{
+    padding-left: 20px;
+    padding-right: 10px;
+}
+.dataTables_length{
+    display: flex;
+}
+.dataTables_filter{
+    display: flex;
+    flex-direction: row-reverse;
+}
+.dataTables_info{
+    display: flex;
+}

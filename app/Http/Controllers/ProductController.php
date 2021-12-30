@@ -6,16 +6,13 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class ProductController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+class ProductController extends Controller{
+
+    public function index(){
+
+        $products = Product::all();
+        return view('product.index', ['products' => $products]);
+
     }
 
 
@@ -25,15 +22,30 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+
+    public function store(Request $request){
+
+        $name = $request->input('product-title');
+        $note = $request->input('product-notes');
+        $product_data = $request->input('product-data');
+        $data = null;
+        if($product_data){
+            foreach ($product_data as $_d){
+                $data[] = [
+                    'title' => $_d['data-name'],
+                    'type' => $_d['data-type']
+                ];
+            }
+        }
+
+        $product = Product::create([
+            'name' => $name,
+            'notes' => $note,
+            'data' => json_encode($data)
+        ]);
+
+        return redirect()->route('product.index');
+
     }
 
     /**

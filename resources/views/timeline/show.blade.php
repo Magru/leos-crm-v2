@@ -97,6 +97,9 @@
                                                             @if($_time->type === 'deal')
                                                                 עסקה נסגרה
                                                                 <br>
+
+                                                                @if($_time->getMedia('deal_files')->first())
+                                                                @endif
                                                                 <a href="{{ $_time->getMedia('deal_files')->first()->getUrl() }}" target="_blank">הסכם</a>
                                                             @else
                                                                 {{ $_time->subject }}

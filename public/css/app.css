@@ -11058,3 +11058,7 @@ select.form-control {
   display: flex;
 }
 
+.deal-row {
+  background: rgba(196, 68, 215, 0.3);
+}
+

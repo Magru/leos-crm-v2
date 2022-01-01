@@ -55,7 +55,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('clients/add-client', [ClientController::class,'create']);
         Route::get('clients/delete-client/{id}', [ClientController::class,'destroy'])->name('destroy-client');
         Route::get('conversation/update/{client}', [ConversationController::class,'fetchConversation'])->name('update-conversation');
-        Route::get('deals/fetch', [DealController::class,'fetchClientDeal'])->name('fetch-client-deals');
+        Route::get('conversation/update-deal/{client}', [DealController::class,'updateDealTimeline'])->name('update-deals');
+        //Route::get('deals/fetch/{name}', [DealController::class,'fetchClientDeal'])->name('fetch-client-deals');
 
         Route::get('clients/edit/{id}', [ClientController::class,'edit'])->name('edit-client');
 

@@ -18,36 +18,27 @@ class ConversationController extends Controller
 
     public function fetchConversation(Client $client){
 
-        $mail_count = null;
-        $call_count = null;
+
         $contacts = json_decode($client->contacts, true);
         $phone_nums = [];
 
         if ($contacts) {
             foreach ($contacts as $contact_item) {
                 if ($contact_item['email']) {
-                    $mail_count = $this->updateTimeLine($contact_item['email'], $client->id);
+                    $this->updateMailTimeLine($contact_item['email'], $client->id);
                 }
                 if ($contact_item['tel']) {
                     $phone_nums[] = $contact_item['tel'];
                 }
             }
-            $call_count = $this->fetchClientCallConversation($phone_nums, $client->id);
+            $this->updateCallTimeLine($phone_nums, $client->id);
         }
 
 
-        return view('timeline.show', [
-            'name' => 'ציר זמן עבור ' . $client->name,
-            'id' => $client->id,
-            'timeline' => $client->conversations,
-            'mails_count' => $mail_count,
-            'calls_count' => $call_count,
-        ]);
-
-
+        return redirect()->route('timeline.show', [$client->id]);
     }
 
-    public function updateTimeLine($email, $client_id){
+    public function updateMailTimeLine($email, $client_id){
         $fetched_mails = 0;
         $users_mail = User::all()->pluck('email');
         if ($users_mail) {
@@ -59,7 +50,7 @@ class ConversationController extends Controller
         return $fetched_mails;
     }
 
-    public function fetchClientCallConversation($phones, $client_id){
+    public function updateCallTimeLine($phones, $client_id){
 
         $fetched_count = 0;
 
@@ -152,6 +143,7 @@ class ConversationController extends Controller
                     $message_id = $mlist->id;
                     $optParamsGet2['format'] = 'full';
                     $single_message = $gmail->users_messages->get($user, $message_id, $optParamsGet2);
+
                     $payload = $single_message->getPayload();
                     $parts = $payload->getParts();
                     $message_meta = $this->getMessageMetaFromHeaders($payload->getHeaders());

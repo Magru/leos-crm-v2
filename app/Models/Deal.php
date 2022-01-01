@@ -13,6 +13,7 @@ class Deal extends Model implements HasMedia
     use InteractsWithMedia;
 
 
+
     public function client(){
         return $this->belongsTo(Client::class);
     }

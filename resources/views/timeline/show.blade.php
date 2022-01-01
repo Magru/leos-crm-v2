@@ -48,6 +48,9 @@
                                 <a href="{{ route('update-conversation',$id) }}" class="btn btn-info">
                                     עדכן
                                 </a>
+                                <a href="{{ route('update-deals',$id) }}" class="btn btn-info">
+                                    עדכן עסקעות
+                                </a>
                             </div>
                         </div>
                         <div class="card-block">
@@ -55,7 +58,7 @@
                                 <div class="latest-update-box mt-3">
                                     @foreach($timeline as $_time)
                                         <div
-                                            class="row border-bottom pb-30 pt-30 @if ((str_contains($_time->from, Auth::user()->email) !== false) || (str_contains($_time->to, Auth::user()->email) !== false)) my-mail @endif">
+                                            class="row @if($_time->type === 'deal') deal-row @endif border-bottom pb-30 pt-30 @if ((str_contains($_time->from, Auth::user()->email) !== false) || (str_contains($_time->to, Auth::user()->email) !== false)) my-mail @endif">
                                             <div
                                                 class="col-auto text-right d-flex align-items-center justify-content-center update-meta pr-0">
                                                 @if($_time->type === 'mail')
@@ -68,6 +71,8 @@
                                                     @else
                                                         <i class="ik ik-phone bg-red update-icon"></i>
                                                     @endif
+                                                @elseif($_time->type === 'deal')
+                                                    <i class="ik ik-clipboard bg-yellow update-icon"></i>
                                                 @endif
                                             </div>
                                             <div class="col pl-5">
@@ -78,15 +83,25 @@
                                                     </span>
                                                 </h4>
                                                 <p class="d-flex align-items-center" style="font-size: 18px">
+                                                    @if($_time->type !== 'deal')
                                                     <span
                                                         style="direction: ltr;">{{ str_replace(['<', '>'], '', $_time->from) }}</span>
                                                     <i class="ik ik-arrow-right"></i>
                                                     <span
                                                         style="direction: ltr;">{{ str_replace(['<', '>'], '', $_time->to) }}</span>
+                                                    @endif
                                                 </p>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <h5 class="text-right">{{ $_time->subject }}</h5>
+                                                        <h5 class="text-right">
+                                                            @if($_time->type === 'deal')
+                                                                עסקה נסגרה
+                                                                <br>
+                                                                <a href="{{ $_time->getMedia('deal_files')->first()->getUrl() }}" target="_blank">הסכם</a>
+                                                            @else
+                                                                {{ $_time->subject }}
+                                                            @endif
+                                                        </h5>
                                                     </div>
                                                 </div>
                                                 <div class="row flex-row">

@@ -2,16 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Deal;
+use DOMDocument;
 use Google_Client;
 use Google_Service_Gmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class DealController extends Controller{
+class DealController extends Controller
+{
 
-    public function fetchClientDeal(){
+    public function updateDealTimeline(Client $client){
+        $this->fetchClientDeal($client->name, $client->id);
+
+        return redirect()->route('timeline.show', [$client->id]);
+
+    }
+
+
+    public function fetchClientDeal($client_name, $client_id)
+    {
+
+
         $client = new Google_Client();
         $user_mail = 'office@leos.co.il';
 
@@ -23,7 +38,7 @@ class DealController extends Controller{
             // use the application default credentials
             $client->useApplicationDefaultCredentials();
         } else {
-            echo $this->missingServiceAccountDetailsWarning();
+            Log::alert('Missing Service Account Details');
             return;
         }
 
@@ -39,7 +54,7 @@ class DealController extends Controller{
 
         $list = $gmail->users_messages->listUsersMessages($user_mail, [
             'maxResults' => 1000,
-            'q' => 'in:sent נסגרה עסקה + איתמר רוזן'
+            'q' => 'in:sent  נסגרה עסקה ' . $client_name
         ]);
 
         try {
@@ -49,43 +64,32 @@ class DealController extends Controller{
                 $optParamsGet2['format'] = 'full';
                 $single_message = $gmail->users_messages->get($user_mail, $message_id, $optParamsGet2);
 
+                $message_meta = $this->fetchBody($single_message);
+
                 $files = $this->getAttachments($message_id, $single_message->getPayload()->parts, $gmail);
                 $deal = new Deal();
+                $deal->client_id = $client_id;
+                $deal->date = date('Y-m-d', strtotime($message_meta['date']));
+                $deal->type = 'deal';
 
-                if(!empty($files)) {
+                if (!empty($files)) {
                     foreach ($files as $key => $value) {
-                        $image_64 = $value['data']; //your base64 encoded data
+                        $image_64 = $value['data'];
+                        $deal_note = $this->get_string_between($message_meta['body'], '<body>', '</body>');
+                        if($deal_note){
+                            $deal->note = $deal_note;
+                        }
                         $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal_files');
-
                     }
                 }
                 $deal->save();
 
 
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
         }
 
-        dd($deal);
-    }
-
-    private function missingServiceAccountDetailsWarning(){
-        $ret = "
-    <h3 class='warn'>
-      Warning: You need download your Service Account Credentials JSON from the
-      <a href='http://developers.google.com/console'>Google API console</a>.
-    </h3>
-    <p>
-      Once downloaded, move them into the root directory of this repository and
-      rename them 'service-account-credentials.json'.
-    </p>
-    <p>
-      In your application, you should set the GOOGLE_APPLICATION_CREDENTIALS environment variable
-      as the path to this file, but in the context of this example we will do this for you.
-    </p>";
-
-        return $ret;
     }
 
 
@@ -98,6 +102,82 @@ class DealController extends Controller{
     }
 
 
+    private function fetchBody($single_message)
+    {
+        $payload = $single_message->getPayload();
+        $parts = $payload->getParts();
+        $message_meta = $this->getMessageMetaFromHeaders($payload->getHeaders());
+        $body = $payload->getBody();
+        $FOUND_BODY = FALSE;
+        if (!$FOUND_BODY) {
+            foreach ($parts as $part) {
+                if ($part['parts'] && !$FOUND_BODY) {
+                    foreach ($part['parts'] as $p) {
+                        if ($p['parts'] && count($p['parts']) > 0) {
+                            foreach ($p['parts'] as $y) {
+                                if (($y['mimeType'] === 'text/html') && $y['body']) {
+                                    $FOUND_BODY = $this->decodeBody($y['body']->data);
+                                    break;
+                                }
+                            }
+                        } else if (($p['mimeType'] === 'text/html') && $p['body']) {
+                            $FOUND_BODY = $this->decodeBody($p['body']->data);
+                            break;
+                        }
+                    }
+                }
+                if ($FOUND_BODY) {
+                    break;
+                }
+            }
+        }
+        if (!$FOUND_BODY) {
+            foreach ($parts as $part) {
+                if ($part['body'] && $part['mimeType'] === 'text/html') {
+                    $FOUND_BODY = $this->decodeBody($part['body']->data);
+                    break;
+                }
+            }
+        }
+        if (!$FOUND_BODY) {
+            $FOUND_BODY = $this->decodeBody($body['data']);
+        }
+        if (!$FOUND_BODY) {
+            foreach ($parts as $part) {
+                if ($part['body']) {
+                    $FOUND_BODY = $this->decodeBody($part['body']->data);
+                    break;
+                }
+            }
+        }
+        if (!$FOUND_BODY) {
+            $FOUND_BODY = '(No message)';
+        }
+
+        return [
+            'body' => $FOUND_BODY,
+            'date' => $message_meta['date']
+        ];
+    }
+
+    private function getAttachments($message_id, $parts, $gmail)
+    {
+        $attachments = [];
+        foreach ($parts as $part) {
+            if (!empty($part->body->attachmentId)) {
+                $attachment = $gmail->users_messages_attachments->get('me', $message_id, $part->body->attachmentId);
+                $attachments[] = [
+                    'filename' => $part->filename,
+                    'mimeType' => $part->mimeType,
+                    'data' => strtr($attachment->data, '-_', '+/')
+                ];
+            } else if (!empty($part->parts)) {
+                $attachments = array_merge($attachments, $this->getAttachments($message_id, $part->parts, $gmail));
+            }
+        }
+        return $attachments;
+    }
+
     public function decodeBody($body)
     {
         $rawData = $body;
@@ -109,21 +189,41 @@ class DealController extends Controller{
         return $decodedMessage;
     }
 
-    private function getAttachments($message_id, $parts, $gmail) {
-        $attachments = [];
-        foreach ($parts as $part) {
-            if (!empty($part->body->attachmentId)) {
-                $attachment = $gmail->users_messages_attachments->get('me', $message_id, $part->body->attachmentId);
-                $attachments[] = [
-                    'filename' => $part->filename,
-                    'mimeType' => $part->mimeType,
-                    'data'     => strtr($attachment->data, '-_', '+/')
-                ];
-            } else if (!empty($part->parts)) {
-                $attachments = array_merge($attachments, $this->getAttachments($message_id, $part->parts, $gmail));
-            }
-        }
-        return $attachments;
+    private function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
+
+    function getMessageMetaFromHeaders($headers){
+        $meta = [
+            'from' => null,
+            'to' => null,
+            'date' => null,
+            'subject' => null
+        ];
+
+        foreach ($headers as $_item) {
+            switch ($_item->name) {
+                case 'Date':
+                    $meta['date'] = $_item->value;
+                    break;
+                case 'Message-ID':
+                    $meta['message-id'] = $_item->value;
+                    break;
+            }
+
+            if ($_item->name === 'From') {
+                $meta['from'] = $_item->value;
+            }
+
+        }
+
+        return $meta;
+    }
+
 
 }

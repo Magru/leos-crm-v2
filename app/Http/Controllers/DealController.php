@@ -71,6 +71,7 @@ class DealController extends Controller
                 $deal->client_id = $client_id;
                 $deal->date = date('Y-m-d', strtotime($message_meta['date']));
                 $deal->type = 'deal';
+                $deal->bid_number = 'na';
 
                 if (!empty($files)) {
                     foreach ($files as $key => $value) {

@@ -99,8 +99,8 @@
                                                                 <br>
 
                                                                 @if($_time->getMedia('deal_files')->first())
+                                                                    <a href="{{ $_time->getMedia('deal_files')->first()->getUrl() }}" target="_blank">הסכם</a>
                                                                 @endif
-                                                                <a href="{{ $_time->getMedia('deal_files')->first()->getUrl() }}" target="_blank">הסכם</a>
                                                             @else
                                                                 {{ $_time->subject }}
                                                             @endif

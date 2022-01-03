@@ -22,6 +22,8 @@ class ConversationController extends Controller
         $contacts = json_decode($client->contacts, true);
         $phone_nums = [];
 
+        dd($contacts)''
+
         if ($contacts) {
             foreach ($contacts as $contact_item) {
                 if ($contact_item['email']) {
@@ -41,7 +43,6 @@ class ConversationController extends Controller
     public function updateMailTimeLine($email, $client_id){
         $fetched_mails = 0;
         $users_mail = User::all()->pluck('email');
-        dd($users_mail);
         if ($users_mail) {
             foreach ($users_mail as $mail) {
                 $fetched_mails =  $this->fetchClientMailConversation($mail, $email, $client_id);

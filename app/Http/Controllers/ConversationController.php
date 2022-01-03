@@ -129,6 +129,7 @@ class ConversationController extends Controller
 
         $gmail = new Google_Service_Gmail($client);
 
+        dd($clientMail);
 
         $list = $gmail->users_messages->listUsersMessages($user, [
             'maxResults' => 5000,

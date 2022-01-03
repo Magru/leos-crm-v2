@@ -41,6 +41,7 @@ class ConversationController extends Controller
     public function updateMailTimeLine($email, $client_id){
         $fetched_mails = 0;
         $users_mail = User::all()->pluck('email');
+        dd($users_mail);
         if ($users_mail) {
             foreach ($users_mail as $mail) {
                 $fetched_mails =  $this->fetchClientMailConversation($mail, $email, $client_id);
@@ -129,7 +130,6 @@ class ConversationController extends Controller
 
         $gmail = new Google_Service_Gmail($client);
 
-        dd($clientMail);
 
         $list = $gmail->users_messages->listUsersMessages($user, [
             'maxResults' => 5000,

@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function(){
 	// logout route
 	Route::get('/logout', [LoginController::class,'logout']);
 	Route::get('/clear-cache', [HomeController::class,'clearCache']);
+    Route::get('/client/fetch', [ClientController::class,'fetch']);
 
 	// dashboard route
 	Route::get('/dashboard', function () {
@@ -75,6 +76,11 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('clients/index', [ClientController::class,'index'])->name('client-index');
         Route::get('clients/show/{id}', [ClientController::class,'show'])->name('client-show');
         Route::get('timeline/show/{id}', [TimelineController::class,'showTimeline'])->name('timeline.show');
+    });
+
+
+    Route::group(['middleware' => 'can:manage_deals'], function(){
+        Route::get('deals/new', [DealController::class,'newOrder'])->name('deal.new');
     });
 
 

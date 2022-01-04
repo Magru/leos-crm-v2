@@ -28,7 +28,6 @@ class ClientController extends Controller
 
     public function store(Request $request){
         $client_name = $request->input('name');
-        $client_rank = $request->input('rank');
         $contacts_field = $request->input('contact-persons');
         $rank = $request->input('rank');
         $contacts = null;
@@ -117,5 +116,15 @@ class ClientController extends Controller
 
         return redirect()->route('client-index');
 
+    }
+
+    public function fetch(Request $request){
+        $data = [];
+        if($request->has('q')){
+            $data = Client::select("id","name")
+                ->where('name','LIKE',"%". $request->input('q') . "%")
+                ->get();
+        }
+        return response()->json($data);
     }
 }

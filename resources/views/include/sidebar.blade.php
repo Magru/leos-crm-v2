@@ -17,6 +17,19 @@
     <div class="sidebar-content">
         <div class="nav-container">
             <nav id="main-menu-navigation" class="navigation-main">
+
+                @can('manage_deals')
+                    <div class="nav-item {{ ($segment1 == 'pos') ? 'active' : '' }}">
+                        <a href="{{ URL::route('deal.new') }}" class="d-flex justify-content-end">
+                        <span class=" badge badge-success badge-right">
+                            הזמנה חדשה
+                            <i class="ik ik-printer"></i>
+                        </span>
+                        </a>
+                    </div>
+                @endcan
+
+
                 <div class="nav-item {{ ($segment1 == 'dashboard') ? 'active' : '' }}">
                     <a href="{{route('dashboard')}}">
                         <span>לוח בקרה</span>
@@ -82,6 +95,7 @@
                         @endcan
                     </div>
                 </div>
+
             </nav>
         </div>
     </div>

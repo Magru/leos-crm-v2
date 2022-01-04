@@ -11,9 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
-class DealController extends Controller
-{
+class DealController extends Controller{
+
+
+    public function newOrder() :View{
+        return view('deal.new');
+    }
+
 
     public function updateDealTimeline(Client $client){
         $this->fetchClientDeal($client->name, $client->id);

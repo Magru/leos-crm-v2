@@ -11062,3 +11062,11 @@ select.form-control {
   background: rgba(196, 68, 215, 0.3);
 }
 
+.select2-results__message {
+  text-align: right;
+}
+
+.select2-results__option {
+  text-align: right;
+}
+

@@ -21,7 +21,7 @@ class ConversationController extends Controller
 
         $contacts = json_decode($client->contacts, true);
         $phone_nums = [];
-        
+
 
         if ($contacts) {
             foreach ($contacts as $contact_item) {

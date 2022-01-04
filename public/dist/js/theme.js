@@ -1,6 +1,6 @@
 ! function(e, s, i) {
     "use strict";
-    i(s).ready(function() { 
+    i(s).ready(function() {
         function a(e, s) {
             e.children(".submenu-content").show().slideUp(200, function() {
                 i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
@@ -154,7 +154,7 @@
             minScrollbarLength: 5
         });
 
-        // multiple image 
+        // multiple image
         /*function multiImage()
         {
 
@@ -167,9 +167,9 @@
             return false;
         });
 
-        
 
-        
+
+
 
         var gridButton = $('a.view-grid'),
             thumbButton = $('a.view-thumb'),
@@ -226,7 +226,7 @@
           // defaults to false.
           isFirstItemUndeletable: true
         });
-        $(".select2").select2();
+        //$(".select2").select2();
         $('#inlinedatetimepicker').datetimepicker({
             inline: true,
             sideBySide: true
@@ -241,5 +241,7 @@
           height: 300,
           tabsize: 2
         });
+
+
     })
 }(window, document, jQuery);

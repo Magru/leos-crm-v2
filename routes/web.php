@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('clients/edit/{id}', [ClientController::class,'edit'])->name('edit-client');
 
         Route::post('clients/add-client', [ClientController::class,'store'])->name('store-client');
+        Route::post('clients/add-client-from-deal', [ClientController::class,'storeFromDeal'])->name('store-client-from-deal');
         Route::post('clients/store-media', [ClientController::class,'storeMedia'])->name('store-client-media');
     });
 

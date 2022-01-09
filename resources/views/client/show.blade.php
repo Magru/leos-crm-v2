@@ -20,7 +20,7 @@
 
             <div class="row clearfix">
 
-                @if($social['facebook'])
+                @if(isset($social['facebook']))
                     <div class="col-lg-2 col-md-4 col-6">
                         <div class="widget social-widget">
                             <div class="widget-body">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 @endif
-                @if($social['instagram'])
+                @if(isset($social['instagram']))
                     <div class="col-lg-2 col-md-4 col-6">
                         <div class="widget social-widget">
                             <div class="widget-body">
@@ -47,7 +47,7 @@
                     </div>
                 @endif
 
-                @if($social['www'])
+                @if(isset($social['www']))
                     <div class="col-lg-2 col-md-4 col-6">
                         <div class="widget social-widget">
                             <div class="widget-body">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 @endif
-                @if($social['linkedin'])
+                @if(isset($social['linkedin']))
                     <div class="col-lg-2 col-md-4 col-6">
                         <div class="widget social-widget">
                             <div class="widget-body">

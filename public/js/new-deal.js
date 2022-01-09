@@ -1,13 +1,13 @@
 "use strict";
 
 $(document).ready(function() {
-    $('#client').select2({
+    let selectInstance = $('#client').select2({
         minimumInputLength: 3,
         dir: "rtl",
+        initSelection: function(element, callback) {
+
+        },
         language: {
-            // You can find all of the options in the language files provided in the
-            // build. They all must be functions that return the string that should be
-            // displayed.
             inputTooShort: function () {
                 return "הקלד לפחות 3 תווים";
             },
@@ -43,5 +43,37 @@ $(document).ready(function() {
             cache: true
         }
     });
+
+    $('#new-client').click(function (e){
+        e.preventDefault();
+        selectInstance.val(null).trigger('change');
+        $('#new_client_modal').modal('show');
+    });
+
+    $('#remote-add-client').on('submit', function (e){
+        e.preventDefault();
+        $('#remote-add-loader').addClass('loading');
+
+        const formData = $('.has-repeater').repeaterVal();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('#remote-add-client [name="_token"]').val()
+            },
+            method: 'POST',
+            url: '/clients/add-client-from-deal',
+            data: {
+                name: formData.name,
+                contact_persons: formData.contact_persons,
+                rank: formData.rank
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#remote-add-loader').removeClass('loading');
+                var newOption = new Option(data.name, data.id, false, false);
+                selectInstance.append(newOption).trigger('change');
+                $('#new_client_modal').modal('hide');
+            }
+        });
+    })
 
 });

@@ -28,7 +28,7 @@ class ClientController extends Controller
 
     public function store(Request $request){
         $client_name = $request->input('name');
-        $contacts_field = $request->input('contact-persons');
+        $contacts_field = $request->input('contact_persons');
         $rank = $request->input('rank');
         $contacts = null;
 
@@ -69,6 +69,55 @@ class ClientController extends Controller
 
         return redirect()->route('client-index');
 
+    }
+
+
+    public function storeFromDeal(Request $request){
+        $name = $request->input('name')['[object Object'];
+        $rank = $request->input('rank')['[object Object'];
+        $contacts_field = $request->input('contact_persons');
+        $contacts = null;
+
+
+        if($contacts_field){
+            foreach ($contacts_field as $_c){
+                $contacts[] = [
+                    'name' => $_c['contact-name'],
+                    'email' => $_c['contact-email'],
+                    'tel' => $_c['contact-tel'],
+                    'role' => $_c['contact-role']
+                ];
+            }
+        }
+
+        $social = [
+            'facebook' => null,
+            'instagram' => null,
+            'linkedin' => null,
+            'www' => null
+        ];
+
+        $client = Client::firstOrCreate(
+            [
+                'name' => $name,
+            ],
+            [
+                'contacts' => json_encode($contacts),
+                'social' => json_encode($social),
+                'website' => json_encode($social['www']),
+                'dev_site' => json_encode([]),
+                'domain_notes' => json_encode([]),
+                'note' => json_encode([]),
+                'rank' => $rank
+            ]
+        );
+
+
+
+        return response()->json([
+            'id' => $client->id,
+            'name' => $client->name
+        ]);
     }
 
 

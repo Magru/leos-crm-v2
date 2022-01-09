@@ -11070,3 +11070,14 @@ select.form-control {
   text-align: right;
 }
 
+#remote-add-loader {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+#remote-add-loader.loading {
+  opacity: 1;
+}
+

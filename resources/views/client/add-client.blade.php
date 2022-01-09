@@ -69,7 +69,7 @@
 
                                     <h4 class="sub-title">אנשי קשר</h4>
                                     <div class="form-group row">
-                                        <div data-repeater-list="contact-persons" class="pl-3">
+                                        <div data-repeater-list="contact_persons" class="pl-3">
                                             @if($client)
                                                 @php $contacts= json_decode($client->contacts); @endphp
                                                 @foreach($contacts  as $count=>$_contact)

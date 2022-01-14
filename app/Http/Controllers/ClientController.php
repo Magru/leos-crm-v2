@@ -77,6 +77,12 @@ class ClientController extends Controller
         $rank = $request->input('rank')['[object Object'];
         $contacts_field = $request->input('contact_persons');
         $contacts = null;
+        $address = [
+            'city' => $request->input('city')['[object Object'],
+            'address' => $request->input('address')['[object Object'],
+            'zip' => $request->input('zip')['[object Object'],
+        ];
+
 
 
         if($contacts_field){
@@ -108,7 +114,8 @@ class ClientController extends Controller
                 'dev_site' => json_encode([]),
                 'domain_notes' => json_encode([]),
                 'note' => json_encode([]),
-                'rank' => $rank
+                'rank' => $rank,
+                'addresses' => json_encode($address),
             ]
         );
 
@@ -125,6 +132,7 @@ class ClientController extends Controller
 
         $client = Client::where('id', $id)->first();
         $client_conversations = $client->conversations;
+
 
         return view('client.show', [
             'name' => $client->name,

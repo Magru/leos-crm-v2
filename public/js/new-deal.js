@@ -1,6 +1,26 @@
 "use strict";
 
 $(document).ready(function() {
+
+    const users = $('#user_id').select2({
+        language: {
+            inputTooShort: function () {
+                return "הקלד לפחות 3 תווים";
+            },
+            errorLoading: function (){
+                return 'שגיאה. נתקן מחר...'
+            },
+            searching: function (){
+                return 'מחפש'
+            },
+            noResults: function (){
+                return 'לא נמצא'
+            },
+
+        },
+        placeholder: 'בחר נציג',
+    })
+
     let selectInstance = $('#client').select2({
         minimumInputLength: 3,
         dir: "rtl",
@@ -44,6 +64,7 @@ $(document).ready(function() {
         }
     });
 
+
     $('#new-client').click(function (e){
         e.preventDefault();
         selectInstance.val(null).trigger('change');
@@ -64,7 +85,10 @@ $(document).ready(function() {
             data: {
                 name: formData.name,
                 contact_persons: formData.contact_persons,
-                rank: formData.rank
+                rank: formData.rank,
+                city: formData.city,
+                address: formData.address,
+                zip: formData.zip
             },
             dataType: 'json',
             success: function (data) {
@@ -74,6 +98,27 @@ $(document).ready(function() {
                 $('#new_client_modal').modal('hide');
             }
         });
-    })
+    });
+
+    tinymce.init({
+        selector: '#order-notes',
+        language: 'he_IL',
+        directionality: 'rtl',
+        height: 400
+    });
+
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+    elems.forEach(function(html) {
+        var switchery = new Switchery(html,{ size: 'small' });
+    });
+
+    var changeCheckbox = document.querySelector('.product-switch');
+
+    changeCheckbox.onchange = function() {
+        if(changeCheckbox.checked){
+            console.log(changeCheckbox.dataset.id);
+        }
+    };
 
 });

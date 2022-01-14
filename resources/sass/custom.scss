@@ -156,3 +156,8 @@ select.form-control{
         opacity: 1;
     }
 }
+.select2-search__field{
+    text-align: right;
+    direction: ltr;
+}
+@import 'card';

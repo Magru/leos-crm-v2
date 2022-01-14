@@ -28,7 +28,12 @@ class Client extends Model implements HasMedia
         'proposal_files',
         'design_files',
         'text_files',
-        'rank'
+        'rank',
+        'addresses'
+    ];
+
+    protected $attributes = [
+        'addresses' => [],
     ];
 
     public function conversations(){

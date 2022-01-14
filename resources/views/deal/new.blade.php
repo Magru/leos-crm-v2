@@ -3,6 +3,11 @@
 @section('content')
 
 
+    @push('head')
+        <link rel="stylesheet" href="{{ asset('plugins/mohithg-switchery/dist/switchery.min.css') }}">
+    @endpush
+
+
     <div class="container">
         <div class="page-header">
             <div class="row align-items-end">
@@ -18,12 +23,12 @@
                 <div class="col-lg-4"></div>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-md-12 pb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <form class="new-deal-form">
-                                {{ csrf_field() }}
+            <form class="new-deal-form">
+                {{ csrf_field() }}
+                <div class="row mt-3">
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
                                 <div class="sub-title">לקוח</div>
                                 <div class="form-group row">
                                     <div class="col-md-10">
@@ -36,11 +41,120 @@
                                         </button>
                                     </div>
                                 </div>
-                            </form>
+
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">מדדי לקוח</div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="client_review">סקור העסק</label>
+                                        <input type="text" class="form-control" name="client_review" required
+                                               id="client_review">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="branch_review">סקור ענפי</label>
+                                        <input type="text" class="form-control" name="branch_review" required
+                                               id="branch_review">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="client_seniority">ותק עסק</label>
+                                        <input type="text" class="form-control" name="client_seniority" required
+                                               id="client_seniority">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="employed_numbers">מספר מועסקים</label>
+                                        <input type="text" class="form-control" name="employed_numbers"
+                                               id="employed_numbers">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">הצעת מחיר</div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="client_seniority">מספר הצעת מחיר</label>
+                                        <input type="text" class="form-control" name="price_request_num"
+                                               id="price_request_num">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="fetch_client_name">נציג</label>
+                                        <select class="form-control client" id="user_id" name="user_id">
+                                            <option disabled selected>בחר נחיג</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">מוצרים</div>
+                                <div class="form-group row">
+                                    @foreach($products as $product)
+                                        <div class="col-md-6 p-1">
+                                            <div class="border p-1">
+                                                <input type="checkbox"
+                                                       class="js-switch product-switch"
+                                                       data-id="{{ $product->id }}"
+                                                       name="product-{{ $product->id }}"
+                                                       id="product-{{ $product->id }}" value="{{ $product->id }}" />
+                                                <label for="product-{{ $product->id }}" class="mb-0">{{ $product->name }}</label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 pb-4">
+                        @include('deal.card');
+                    </div>
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">הערות</div>
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" name="order-notes" id="order-notes" rows="10"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <button type="submit" class="btn btn-success" style=" height: 41px;">
+                                    <span style="font-size: 22px;">שדר</span>
+                                    <i class="ik ik-check-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </form>
 
 
         </div>
@@ -116,6 +230,25 @@
                                             class="btn btn-success btn-icon mr-2  repeater-add-btn"><i
                                             class="ik ik-plus"></i></button>
                                 </div>
+
+
+                                <h4 class="sub-title">כתובות</h4>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label for="city">עיר</label>
+                                        <input type="text" name="city" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="address">כתובת</label>
+                                        <input type="text" name="address" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="zip">מיקוד</label>
+                                        <input type="text" name="zip" class="form-control">
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
 
@@ -132,6 +265,10 @@
 
     <!-- push external js -->
     @push('script')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="{{ asset('plugins/mohithg-switchery/dist/switchery.min.js') }}"></script>
+        <script src="{{ asset('js/card.js') }}"></script>
         <script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
         <script src="{{ asset('js/new-deal.js') }}"></script>
         <script src="{{ asset('plugins/jquery.repeater/jquery.repeater.min.js') }}"></script>

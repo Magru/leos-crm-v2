@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Deal;
+use App\Models\Product;
+use App\Models\User;
 use DOMDocument;
 use Google_Client;
 use Google_Service_Gmail;
@@ -17,7 +19,14 @@ class DealController extends Controller{
 
 
     public function newOrder() :View{
-        return view('deal.new');
+
+        $users = User::all();
+        $products = Product::all();
+
+        return view('deal.new',[
+            'users' => $users,
+            'products' => $products
+        ]);
     }
 
 

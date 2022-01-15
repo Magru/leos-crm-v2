@@ -17,6 +17,10 @@ use Illuminate\View\View;
 
 class DealController extends Controller{
 
+    private $fetch_mails = [
+        'office@leos.co.il',
+        'order@leos.co.il'
+    ];
 
     public function newOrder() :View{
 
@@ -31,19 +35,23 @@ class DealController extends Controller{
 
 
     public function updateDealTimeline(Client $client){
-        $this->fetchClientDeal($client->name, $client->id);
+
+        foreach ($this->fetch_mails as $_mail){
+            $this->fetchClientDeal($client->name, $client->id, $_mail);
+        }
+
 
         return redirect()->route('timeline.show', [$client->id]);
 
     }
 
 
-    public function fetchClientDeal($client_name, $client_id)
+    public function fetchClientDeal($client_name, $client_id, $account_mail)
     {
 
 
         $client = new Google_Client();
-        $user_mail = 'office@leos.co.il';
+        $user_mail = $account_mail;
 
 
         if ($credentials_file = $this->checkServiceAccountCredentialsFile()) {

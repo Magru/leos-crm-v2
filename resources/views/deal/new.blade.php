@@ -116,6 +116,20 @@
                                                        name="product-{{ $product->id }}"
                                                        id="product-{{ $product->id }}" value="{{ $product->id }}" />
                                                 <label for="product-{{ $product->id }}" class="mb-0">{{ $product->name }}</label>
+
+                                                <div class="product-attributes mt-3" id="attr-for-{{ $product->id }}">
+                                                    @if($product->data !== 'null')
+                                                        @foreach(json_decode($product->data, true) as $index => $_data)
+                                                            <?php
+                                                                $template = 'product.attributes.' . $_data['type'];
+                                                                $id = 'prod-' . $product->id . '-attr-' . $index
+                                                            ?>
+                                                                <label class="mb-0" for="{{ $id }}">{{ $_data['title'] }}</label>
+                                                            @include($template, ['id' => $id])
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+
                                             </div>
                                         </div>
                                     @endforeach

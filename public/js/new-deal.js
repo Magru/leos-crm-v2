@@ -113,12 +113,18 @@ $(document).ready(function() {
         var switchery = new Switchery(html,{ size: 'small' });
     });
 
-    var changeCheckbox = document.querySelector('.product-switch');
+    var changeCheckbox = Array.prototype.slice.call(document.querySelectorAll('.product-switch'));
+    
+    changeCheckbox.forEach(function (checkbox){
+        checkbox.onchange = function() {
+            if(checkbox.checked){
+                $('#attr-for-' + checkbox.dataset.id).addClass('show-attribute')
+            }else{
+                $('#attr-for-' + checkbox.dataset.id).removeClass('show-attribute')
+            }
+        };
+    });
 
-    changeCheckbox.onchange = function() {
-        if(changeCheckbox.checked){
-            console.log(changeCheckbox.dataset.id);
-        }
-    };
+
 
 });

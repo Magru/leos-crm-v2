@@ -11086,6 +11086,20 @@ select.form-control {
   direction: ltr;
 }
 
+.input-group .input-group-prepend .input-group-text {
+  position: relative;
+  top: 3px;
+}
+
+.product-attributes {
+  height: 0;
+  overflow: hidden;
+}
+
+.product-attributes.show-attribute {
+  height: auto;
+}
+
 .payment-title {
   width: 100%;
   text-align: center;

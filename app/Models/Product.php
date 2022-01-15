@@ -13,4 +13,8 @@ class Product extends Model{
         'data',
         'notes'
     ];
+
+    protected $attributes = [
+        'notes' => 'n/a',
+    ];
 }

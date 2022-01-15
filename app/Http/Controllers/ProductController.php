@@ -44,7 +44,7 @@ class ProductController extends Controller{
 
         $product = Product::create([
             'name' => $name,
-            'notes' => $note,
+            'notes' => $note ?: 'n/a',
             'data' => json_encode($data)
         ]);
 

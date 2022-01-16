@@ -23,7 +23,7 @@
                 <div class="col-lg-4"></div>
             </div>
 
-            <form class="new-deal-form">
+            <form class="new-deal-form" method="POST" action="{{ route('deal.store') }}">
                 {{ csrf_field() }}
                 <div class="row mt-3">
                     <div class="col-md-12 pb-4">
@@ -113,7 +113,7 @@
                                                 <input type="checkbox"
                                                        class="js-switch product-switch"
                                                        data-id="{{ $product->id }}"
-                                                       name="product-{{ $product->id }}"
+                                                       name="products[]"
                                                        id="product-{{ $product->id }}" value="{{ $product->id }}" />
                                                 <label for="product-{{ $product->id }}" class="mb-0">{{ $product->name }}</label>
 
@@ -122,11 +122,12 @@
                                                         @foreach(json_decode($product->data, true) as $index => $_data)
                                                             <?php
                                                                 $template = 'product.attributes.' . $_data['type'];
-                                                                $id = 'prod-' . $product->id . '-attr-' . $index
+                                                                $id = 'prod-' . $product->id . '-attr'
                                                             ?>
                                                                 <label class="mb-0" for="{{ $id }}">{{ $_data['title'] }}</label>
-                                                            @include($template, ['id' => $id])
+                                                            @include($template, ['id' => $id, 'label' => $_data['title']])
                                                         @endforeach
+                                                            <input type="text" name="{{ $id }}-data">
                                                     @endif
                                                 </div>
 
@@ -159,7 +160,7 @@
                     <div class="col-md-12 pb-4">
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <button type="submit" class="btn btn-success" style=" height: 41px;">
+                                <button type="button" class="btn btn-success" id="new-deal-submit" style=" height: 41px;">
                                     <span style="font-size: 22px;">שדר</span>
                                     <i class="ik ik-check-circle"></i>
                                 </button>

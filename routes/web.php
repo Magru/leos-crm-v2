@@ -82,6 +82,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::group(['middleware' => 'can:manage_deals'], function(){
         Route::get('deals/new', [DealController::class,'newOrder'])->name('deal.new');
+        Route::post('deal/store', [DealController::class,'store'])->name('deal.store');
     });
 
 

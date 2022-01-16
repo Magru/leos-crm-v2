@@ -33,6 +33,18 @@ class DealController extends Controller{
         ]);
     }
 
+    public function store(Request $request){
+
+        $products = $request->input('products');
+
+
+
+        foreach ($products as $_p){
+            var_dump(json_decode($request->input('prod-'. $_p .'-attr-data')));
+        }
+
+    }
+
 
     public function updateDealTimeline(Client $client){
 

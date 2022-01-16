@@ -114,7 +114,7 @@ $(document).ready(function() {
     });
 
     var changeCheckbox = Array.prototype.slice.call(document.querySelectorAll('.product-switch'));
-    
+
     changeCheckbox.forEach(function (checkbox){
         checkbox.onchange = function() {
             if(checkbox.checked){
@@ -124,6 +124,23 @@ $(document).ready(function() {
             }
         };
     });
+
+    $('#new-deal-submit').click(function (e){
+        e.preventDefault();
+
+        changeCheckbox.forEach(function (checkbox){
+            if(checkbox.checked){
+                let arr = [];
+                $('.prod-' + checkbox.dataset.id + '-attr').each(function (index, item){
+                    arr.push({title: $(this).data('name'), value: $(this).val()})
+                });
+                console.log('prod-'+checkbox.dataset.id+'-data');
+                $('input[name="prod-'+checkbox.dataset.id+'-attr-data"]').val(JSON.stringify(arr))
+            }
+        })
+
+        $('.new-deal-form').submit();
+    })
 
 
 

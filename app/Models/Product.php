@@ -17,4 +17,8 @@ class Product extends Model{
     protected $attributes = [
         'notes' => 'n/a',
     ];
+
+    public function deals(){
+        return $this->belongsToMany(Deal::class);
+    }
 }

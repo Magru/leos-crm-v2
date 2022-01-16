@@ -17,4 +17,10 @@ class Deal extends Model implements HasMedia
     public function client(){
         return $this->belongsTo(Client::class);
     }
+
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
 }

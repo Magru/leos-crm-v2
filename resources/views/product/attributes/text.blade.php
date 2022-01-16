@@ -1,1 +1,1 @@
-<input type="text" name="{{ $id }}" id="{{ $id }}" class="form-control">
+<input type="text" name="{{ $id }}" data-name="{{ $label }}"  class="form-control {{ $id }}">

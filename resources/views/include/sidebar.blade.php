@@ -70,6 +70,20 @@
                     </div>
                 </div>
 
+                    <div
+                        class="nav-item {{ ($segment1 == 'deals') ? 'active open' : '' }} has-sub">
+                        <a href="#">
+                            <span>עסקאות</span>
+                            <i class="ik ik-star"></i>
+                        </a>
+                        <div class="submenu-content">
+                            @can('view_deals')
+                                <a href="{{ URL::route('deal.index') }}"
+                                   class="menu-item {{ ($segment1 == 'create-deal') ? 'active' : '' }}">רשימת עסקאות</a>
+                            @endcan
+                        </div>
+                    </div>
+
 
                 <div
                     class="nav-item {{ ($segment1 == 'users' || $segment1 == 'roles'||$segment1 == 'permission' ||$segment1 == 'user') ? 'active open' : '' }} has-sub">

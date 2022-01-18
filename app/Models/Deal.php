@@ -12,15 +12,25 @@ class Deal extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-
+    protected $fillable = [
+        'bid_number',
+        'note',
+        'client_review',
+        'branch_review',
+        'client_seniority',
+        'employed_numbers'
+    ];
 
     public function client(){
         return $this->belongsTo(Client::class);
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('attributes');
     }
 }

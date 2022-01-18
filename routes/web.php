@@ -85,6 +85,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('deal/store', [DealController::class,'store'])->name('deal.store');
     });
 
+    Route::group(['middleware' => 'can:view_deals'], function(){
+        Route::get('deals/index', [DealController::class,'index'])->name('deal.index');
+    });
+
 
 	//only those have manage_user permission will get access
 	Route::group(['middleware' => 'can:manage_user'], function(){

@@ -132,9 +132,8 @@ $(document).ready(function() {
             if(checkbox.checked){
                 let arr = [];
                 $('.prod-' + checkbox.dataset.id + '-attr').each(function (index, item){
-                    arr.push({title: $(this).data('name'), value: $(this).val()})
+                    arr.push({title: $(this).data('name'), value: $(this).val(), type: $(this).data('type')})
                 });
-                console.log('prod-'+checkbox.dataset.id+'-data');
                 $('input[name="prod-'+checkbox.dataset.id+'-attr-data"]').val(JSON.stringify(arr))
             }
         })

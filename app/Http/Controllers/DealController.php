@@ -22,6 +22,13 @@ class DealController extends Controller{
         'order@leos.co.il'
     ];
 
+    public function index(){
+        $deals = Deal::all();
+        return view('deal.index', [
+            'deals' => $deals
+        ]);
+    }
+
     public function newOrder() :View{
 
         $users = User::all();
@@ -35,15 +42,57 @@ class DealController extends Controller{
 
     public function store(Request $request){
 
+
+        $request->validate([
+            'client' => 'required',
+            'client_review' => 'required',
+            'client_seniority' => 'required',
+            'price_request_num' => 'required',
+            'user_id' => 'required',
+        ]);
+
+
+        $client = $request->input('client');
+        $review = $request->input('client_review');
+        $branch_review = $request->input('branch_review');
+        $client_seniority = $request->input('client_seniority');
+        $employed_numbers = $request->input('employed_numbers');
+        $price_request_num = $request->input('price_request_num');
+        $user_id = $request->input('user_id');
+        $note = $request->input('order-notes');
+
         $products = $request->input('products');
 
 
 
-        foreach ($products as $_p){
-            var_dump(json_decode($request->input('prod-'. $_p .'-attr-data')));
+
+        $deal = Deal::create([
+            'client_review' => $review,
+            'branch_review' => $branch_review,
+            'client_seniority' => $client_seniority,
+            'employed_numbers' => $employed_numbers,
+            'bid_number' => $price_request_num,
+            'user_id' => $user_id,
+            'note' => $note,
+            'date' => now()
+        ]);
+
+        $deal->client()->associate(Client::where('id', $client)->first());
+        $deal->user()->associate(User::where('id', $user_id)->first());
+
+        if($products){
+            foreach ($products as $_p){
+                $deal->products()->attach($_p, ['attributes' => $request->input('prod-'. $_p .'-attr-data')]);
+            }
         }
 
+
+        $deal->save();
+        dd($deal);
+
     }
+
+
 
 
     public function updateDealTimeline(Client $client){

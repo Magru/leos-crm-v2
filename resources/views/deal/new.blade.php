@@ -33,8 +33,11 @@
                                 <div class="form-group row">
                                     <div class="col-md-10">
                                         <label for="fetch_client_name">שם לקוח</label>
-                                        <select class="form-control client" id="client" name="client">
+                                        <select class="form-control client" required id="client" name="client">
                                         </select>
+                                        @error('client')
+                                        <div class="alert m-0 p-1 alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
                                         <button class="btn btn-primary" id="new-client" style="height: 35px">לקוח חדש
@@ -53,19 +56,30 @@
                                     <div class="col-md-6">
                                         <label for="client_review">סקור העסק</label>
                                         <input type="text" class="form-control" name="client_review" required
+                                               value="{{ old('client_review') }}"
                                                id="client_review">
+                                        @error('client_review')
+                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label for="branch_review">סקור ענפי</label>
                                         <input type="text" class="form-control" name="branch_review" required
+                                               value="{{ old('branch_review') }}"
                                                id="branch_review">
+                                        @error('branch_review')
+                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <label for="client_seniority">ותק עסק</label>
-                                        <input type="text" class="form-control" name="client_seniority" required
+                                        <input type="text" class="form-control" value="{{ old('client_seniority') }}" name="client_seniority" required
                                                id="client_seniority">
+                                        @error('client_seniority')
+                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label for="employed_numbers">מספר מועסקים</label>
@@ -85,7 +99,11 @@
                                     <div class="col-md-6">
                                         <label for="client_seniority">מספר הצעת מחיר</label>
                                         <input type="text" class="form-control" name="price_request_num"
+                                               value="{{ old('price_request_num') }}"
                                                id="price_request_num">
+                                        @error('price_request_num')
+                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
                                         <label for="fetch_client_name">נציג</label>
@@ -95,6 +113,9 @@
                                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('user_id')
+                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -125,9 +146,9 @@
                                                                 $id = 'prod-' . $product->id . '-attr'
                                                             ?>
                                                                 <label class="mb-0" for="{{ $id }}">{{ $_data['title'] }}</label>
-                                                            @include($template, ['id' => $id, 'label' => $_data['title']])
+                                                            @include($template, ['id' => $id, 'label' => $_data['title'], 'type' => $_data['type']])
                                                         @endforeach
-                                                            <input type="text" name="{{ $id }}-data">
+                                                            <input type="hidden" name="{{ $id }}-data">
                                                     @endif
                                                 </div>
 

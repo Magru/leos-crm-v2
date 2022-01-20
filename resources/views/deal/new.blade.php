@@ -23,7 +23,7 @@
                 <div class="col-lg-4"></div>
             </div>
 
-            <form class="new-deal-form" method="POST" action="{{ route('deal.store') }}">
+            <form class="new-deal-form" method="POST" action="{{ route('deal.store') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="row mt-3">
                     <div class="col-md-12 pb-4">
@@ -168,6 +168,17 @@
                     <div class="col-md-12 pb-4">
                         <div class="card">
                             <div class="card-body">
+                                <div class="sub-title">מסמכים</div>
+                                <div class="needsclick dropzone" id="document-dropzone">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
                                 <div class="sub-title">הערות</div>
                                 <div class="form-group row">
                                     <div class="col-md-12">
@@ -303,12 +314,54 @@
     @push('script')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
         <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
         <script src="{{ asset('plugins/mohithg-switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ asset('js/card.js') }}"></script>
         <script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
         <script src="{{ asset('js/new-deal.js') }}"></script>
         <script src="{{ asset('plugins/jquery.repeater/jquery.repeater.min.js') }}"></script>
         <script src="{{ asset('js/form-components.js') }}"></script>
+        <script>
+            Dropzone.prototype.defaultOptions.dictDefaultMessage = "גרור קבצים לכאן";
+            Dropzone.prototype.defaultOptions.dictRemoveFile = "מחק קובץ";
+            var uploadedDocumentMap = {}
+            Dropzone.options.documentDropzone = {
+                url: '{{ route('deal.store.media') }}',
+                maxFilesize: 2, // MB
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function (file, response) {
+                    $('form').append('<input type="hidden" name="document[]" value="' + response.name + '">')
+                    uploadedDocumentMap[file.name] = response.name
+                },
+                removedfile: function (file) {
+                    file.previewElement.remove()
+                    var name = ''
+                    if (typeof file.file_name !== 'undefined') {
+                        name = file.file_name
+                    } else {
+                        name = uploadedDocumentMap[file.name]
+                    }
+                    $('form').find('input[name="document[]"][value="' + name + '"]').remove()
+                },
+                init: function () {
+                    @if(isset($project) && $project->document)
+                    var files =
+                        {!! json_encode($project->document) !!}
+                        for (var i in files) {
+                        var file = files[i]
+                        this.options.addedfile.call(this, file)
+                        file.previewElement.classList.add('dz-complete')
+                        $('form').append('<input type="hidden" name="document[]" value="' + file.file_name + '">')
+                    }
+                    @endif
+                }
+            }
+        </script>
     @endpush
 @endsection
 

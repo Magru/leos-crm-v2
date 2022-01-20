@@ -29,7 +29,7 @@
                                         <th>ID</th>
                                         <th>תאריך יצירה במערכת</th>
                                         <th>שדות</th>
-                                        <th></th>
+                                        <th>קבצים</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -41,10 +41,11 @@
                                                 {{ $_d->client->name }}
                                             </td>
                                             <td>
-
-
-
-
+                                                @foreach($_d->getMedia('deal-document') as $_m)
+                                                    <a href="{{ $_m->getUrl() }}" title="{{ $_m->name }}" target="_blank">
+                                                        <i class="ik ik-file"></i>
+                                                    </a>
+                                                @endforeach
                                             </td>
                                         </tr>
                                     @endforeach

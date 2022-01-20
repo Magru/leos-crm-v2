@@ -40,6 +40,25 @@ class DealController extends Controller{
         ]);
     }
 
+    public function storeDealMedia(Request $request){
+        $path = storage_path('tmp/deals');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $file = $request->file('file');
+
+        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+
+        $file->move($path, $name);
+
+        return response()->json([
+            'name'          => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
+    }
+
     public function store(Request $request){
 
 
@@ -77,6 +96,10 @@ class DealController extends Controller{
             'date' => now()
         ]);
 
+        foreach ($request->input('document', []) as $file) {
+            $deal->addMedia(storage_path('tmp/deals/' . $file))->toMediaCollection('deal-document');
+        }
+
         $deal->client()->associate(Client::where('id', $client)->first());
         $deal->user()->associate(User::where('id', $user_id)->first());
 
@@ -88,7 +111,7 @@ class DealController extends Controller{
 
 
         $deal->save();
-        dd($deal);
+        //dd($deal);
 
     }
 

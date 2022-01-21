@@ -63,7 +63,8 @@ class ClientController extends Controller
                 'dev_site' => json_encode([]),
                 'domain_notes' => json_encode([]),
                 'note' => json_encode([]),
-                'rank' => $rank
+                'rank' => $rank,
+                'addresses' => json_encode([]),
             ]
         );
 

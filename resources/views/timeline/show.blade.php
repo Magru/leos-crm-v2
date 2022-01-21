@@ -98,8 +98,8 @@
                                                                 עסקה נסגרה
                                                                 <br>
 
-                                                                @if($_time->getMedia('deal_files')->first())
-                                                                    <a href="{{ $_time->getMedia('deal_files')->first()->getUrl() }}" target="_blank">הסכם</a>
+                                                                @if($_time->getMedia('deal-document')->first())
+                                                                    <a href="{{ $_time->getMedia('deal-document')->first()->getUrl() }}" target="_blank">הסכם</a>
                                                                 @endif
                                                             @else
                                                                 {{ $_time->subject }}

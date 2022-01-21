@@ -111,7 +111,7 @@ class DealController extends Controller{
 
 
         $deal->save();
-        //dd($deal);
+        return redirect()->route('deal.index');
 
     }
 
@@ -174,11 +174,27 @@ class DealController extends Controller{
                 $message_meta = $this->fetchBody($single_message);
 
                 $files = $this->getAttachments($message_id, $single_message->getPayload()->parts, $gmail);
-                $deal = new Deal();
-                $deal->client_id = $client_id;
-                $deal->date = date('Y-m-d', strtotime($message_meta['date']));
-                $deal->type = 'deal';
-                $deal->bid_number = 'na';
+
+                $deal = Deal::firstOrCreate([
+                    'gmail_msg_id' => $message_id
+                ],[
+                    'date' => date('Y-m-d', strtotime($message_meta['date'])),
+                    'type' => 'deal',
+                    'bid_number' => 'na',
+                    'gmail_msg_id' => $message_id
+                ]);
+
+                $deal->client()->associate(Client::where('id', $client_id)->first());
+
+                //dd($message_id);
+
+
+//                $deal = new Deal();
+//                $deal->client_id = $client_id;
+//                $deal->date = date('Y-m-d', strtotime($message_meta['date']));
+//                $deal->type = 'deal';
+//                $deal->bid_number = 'na';
+//                $deal->gmail_msg_id = $message_id;
 
                 if (!empty($files)) {
                     foreach ($files as $key => $value) {
@@ -187,7 +203,7 @@ class DealController extends Controller{
                         if($deal_note){
                             $deal->note = $deal_note;
                         }
-                        $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal_files');
+                        $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal-document');
                     }
                 }
                 $deal->save();

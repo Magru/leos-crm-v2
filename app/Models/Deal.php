@@ -18,7 +18,9 @@ class Deal extends Model implements HasMedia
         'client_review',
         'branch_review',
         'client_seniority',
-        'employed_numbers'
+        'employed_numbers',
+        'gmail_msg_id',
+        'type'
     ];
 
     public function client(){

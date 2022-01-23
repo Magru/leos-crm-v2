@@ -65,6 +65,14 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group col-sm-6 row">
+                                            <label for="name" class="col-sm-3 col-form-label">ח״פ</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="company_id" id="company_id"
+                                                       value="@if($client) {{ $client->company_id }} @endif"
+                                                       placeholder="ח״פ">
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <h4 class="sub-title">אנשי קשר</h4>

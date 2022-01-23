@@ -30,6 +30,7 @@ class ClientController extends Controller
         $client_name = $request->input('name');
         $contacts_field = $request->input('contact_persons');
         $rank = $request->input('rank');
+        $company_id = $request->input('company_id');
         $contacts = null;
 
         if($contacts_field){
@@ -65,6 +66,7 @@ class ClientController extends Controller
                 'note' => json_encode([]),
                 'rank' => $rank,
                 'addresses' => json_encode([]),
+                'company_id' => $company_id
             ]
         );
 
@@ -77,6 +79,7 @@ class ClientController extends Controller
         $name = $request->input('name')['[object Object'];
         $rank = $request->input('rank')['[object Object'];
         $contacts_field = $request->input('contact_persons');
+        $company_id = $request->input('company_id');
         $contacts = null;
         $address = [
             'city' => $request->input('city')['[object Object'],
@@ -117,6 +120,7 @@ class ClientController extends Controller
                 'note' => json_encode([]),
                 'rank' => $rank,
                 'addresses' => json_encode($address),
+                'company_id' => $company_id
             ]
         );
 

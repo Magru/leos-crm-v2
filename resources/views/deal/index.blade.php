@@ -27,6 +27,7 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>סטטוס</th>
                                         <th>תאריך יצירה במערכת</th>
                                         <th>שדות</th>
                                         <th>קבצים</th>
@@ -36,6 +37,7 @@
                                     @foreach($deals as $count => $_d)
                                         <tr>
                                             <td>{{ $_d->id }}</td>
+                                            <td>{{ $_d->status }}</td>
                                             <td>{{ date('d/m/Y', strtotime($_d->created_at)) }}</td>
                                             <td>
                                                 {{ $_d->client->name }}
@@ -53,9 +55,11 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>כותרת</th>
+                                        <th>ID</th>
+                                        <th>סטטוס</th>
                                         <th>תאריך יצירה במערכת</th>
-                                        <th></th>
+                                        <th>שדות</th>
+                                        <th>קבצים</th>
                                     </tr>
                                     </tfoot>
                                 </table>

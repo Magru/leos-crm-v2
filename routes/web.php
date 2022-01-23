@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::group(['middleware' => 'can:view_deals'], function(){
         Route::get('deals/index', [DealController::class,'index'])->name('deal.index');
+        Route::get('deals/show/{id}', [DealController::class,'show'])->name('deal.show');
     });
 
 

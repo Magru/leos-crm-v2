@@ -59,7 +59,8 @@
                                                value="{{ old('client_review') }}"
                                                id="client_review">
                                         @error('client_review')
-                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        <div class="alert m-0 p-1 alert-danger"
+                                             style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-md-6">
@@ -68,17 +69,20 @@
                                                value="{{ old('branch_review') }}"
                                                id="branch_review">
                                         @error('branch_review')
-                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        <div class="alert m-0 p-1 alert-danger"
+                                             style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <label for="client_seniority">ותק עסק</label>
-                                        <input type="text" class="form-control" value="{{ old('client_seniority') }}" name="client_seniority" required
+                                        <input type="text" class="form-control" value="{{ old('client_seniority') }}"
+                                               name="client_seniority" required
                                                id="client_seniority">
                                         @error('client_seniority')
-                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        <div class="alert m-0 p-1 alert-danger"
+                                             style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-md-6">
@@ -102,7 +106,8 @@
                                                value="{{ old('price_request_num') }}"
                                                id="price_request_num">
                                         @error('price_request_num')
-                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        <div class="alert m-0 p-1 alert-danger"
+                                             style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-6">
@@ -114,7 +119,8 @@
                                             @endforeach
                                         </select>
                                         @error('user_id')
-                                        <div class="alert m-0 p-1 alert-danger" style="font-size: 12px;">{{ $message }}</div>
+                                        <div class="alert m-0 p-1 alert-danger"
+                                             style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -135,20 +141,34 @@
                                                        class="js-switch product-switch"
                                                        data-id="{{ $product->id }}"
                                                        name="products[]"
-                                                       id="product-{{ $product->id }}" value="{{ $product->id }}" />
-                                                <label for="product-{{ $product->id }}" class="mb-0">{{ $product->name }}</label>
+                                                       id="product-{{ $product->id }}" value="{{ $product->id }}"/>
+                                                <label for="product-{{ $product->id }}"
+                                                       class="mb-0">{{ $product->name }}</label>
+
+                                                <div class="input-group hidden" id="price-{{ $product->id }}-group">
+                                                    <span class="input-group-prepend" id="basic-addon2">
+                                                        <label class="input-group-text" for="price-{{ $product->name }}">מחיר</label>
+                                                    </span>
+                                                    <input type="text"
+                                                           value="{{ $product->price }}"
+                                                           id="price-{{ $product->name }}"
+                                                           name="price-{{ $product->name }}"
+                                                           class="form-control" placeholder="מחיר">
+                                                </div>
 
                                                 <div class="product-attributes mt-3" id="attr-for-{{ $product->id }}">
                                                     @if($product->data !== 'null')
                                                         @foreach(json_decode($product->data, true) as $index => $_data)
                                                             <?php
-                                                                $template = 'product.attributes.' . $_data['type'];
-                                                                $id = 'prod-' . $product->id . '-attr'
+                                                            $template = 'product.attributes.' . $_data['type'];
+                                                            $id = 'prod-' . $product->id . '-attr'
                                                             ?>
-                                                                <label class="mb-0" for="{{ $id }}">{{ $_data['title'] }}</label>
+                                                            <label class="mb-0"
+                                                                   for="{{ $id }}">{{ $_data['title'] }}</label>
+
                                                             @include($template, ['id' => $id, 'label' => $_data['title'], 'type' => $_data['type']])
                                                         @endforeach
-                                                            <input type="hidden" name="{{ $id }}-data">
+                                                        <input type="hidden" name="{{ $id }}-data">
                                                     @endif
                                                 </div>
 
@@ -182,7 +202,8 @@
                                 <div class="sub-title">הערות</div>
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="order-notes" id="order-notes" rows="10"></textarea>
+                                        <textarea class="form-control" name="order-notes" id="order-notes"
+                                                  rows="10"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +213,12 @@
                     <div class="col-md-12 pb-4">
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <button type="button" class="btn btn-success" id="new-deal-submit" style=" height: 41px;">
+                                <button type="button"  class="btn btn-success" id="new-deal-submit"
+                                        style=" height: 41px;">
+                                    <span style="font-size: 22px;">שדר</span>
+                                    <i class="ik ik-check-circle"></i>
+                                </button>
+                                <button class="btn btn-success" id="calculate">
                                     <span style="font-size: 22px;">שדר</span>
                                     <i class="ik ik-check-circle"></i>
                                 </button>
@@ -241,6 +267,14 @@
                                                 <option value="b">B</option>
                                                 <option value="c">C</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 row">
+                                        <label for="name" class="col-sm-12 col-form-label">ח״פ</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" required name="company_id"
+                                                   id="company_id"
+                                                   placeholder="ח״פ">
                                         </div>
                                     </div>
                                 </div>
@@ -315,7 +349,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
         <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
 
         <script src="{{ asset('plugins/mohithg-switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ asset('js/card.js') }}"></script>
@@ -352,7 +386,12 @@
                     @if(isset($project) && $project->document)
                     var files =
                         {!! json_encode($project->document) !!}
-                        for (var i in files) {
+                        for(
+                    var i
+                in
+                    files
+                )
+                    {
                         var file = files[i]
                         this.options.addedfile.call(this, file)
                         file.previewElement.classList.add('dz-complete')

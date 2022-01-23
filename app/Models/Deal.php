@@ -12,6 +12,17 @@ class Deal extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
+    public const CANCELLED = 'בוטלה';
+    public const PENDING = 'המתנה';
+    public const APPROVED = 'בעבודה';
+    public const REMOTE = 'נמשך ממייל';
+
+    public const MAIL_LIST = [
+        'max.folko@gmail.com'
+    ];
+
+
+
     protected $fillable = [
         'bid_number',
         'note',
@@ -20,7 +31,8 @@ class Deal extends Model implements HasMedia
         'client_seniority',
         'employed_numbers',
         'gmail_msg_id',
-        'type'
+        'type',
+        'status'
     ];
 
     public function client(){

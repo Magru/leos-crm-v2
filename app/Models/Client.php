@@ -29,7 +29,8 @@ class Client extends Model implements HasMedia
         'design_files',
         'text_files',
         'rank',
-        'addresses'
+        'addresses',
+        'company_id'
     ];
 
     protected $attributes = [

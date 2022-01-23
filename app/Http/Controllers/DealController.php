@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DealCreated;
 use App\Models\Client;
 use App\Models\Deal;
 use App\Models\Product;
@@ -11,6 +12,7 @@ use Google_Client;
 use Google_Service_Gmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -38,6 +40,10 @@ class DealController extends Controller{
             'users' => $users,
             'products' => $products
         ]);
+    }
+
+    public function show($id){
+
     }
 
     public function storeDealMedia(Request $request){
@@ -93,7 +99,8 @@ class DealController extends Controller{
             'bid_number' => $price_request_num,
             'user_id' => $user_id,
             'note' => $note,
-            'date' => now()
+            'date' => now(),
+            'status' => Deal::PENDING
         ]);
 
         foreach ($request->input('document', []) as $file) {
@@ -111,12 +118,19 @@ class DealController extends Controller{
 
 
         $deal->save();
+//        Mail::raw('עסקה חדשה', function ($message) {
+//            $message->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+//            $message->to('max.folko@gmail.com', 'User Name');
+//        });
+
+        foreach (Deal::MAIL_LIST as $recipient){
+            Mail::to($recipient)->send(new DealCreated($deal));
+        }
+
+
         return redirect()->route('deal.index');
 
     }
-
-
-
 
     public function updateDealTimeline(Client $client){
 
@@ -128,7 +142,6 @@ class DealController extends Controller{
         return redirect()->route('timeline.show', [$client->id]);
 
     }
-
 
     public function fetchClientDeal($client_name, $client_id, $account_mail)
     {
@@ -181,20 +194,11 @@ class DealController extends Controller{
                     'date' => date('Y-m-d', strtotime($message_meta['date'])),
                     'type' => 'deal',
                     'bid_number' => 'na',
-                    'gmail_msg_id' => $message_id
+                    'gmail_msg_id' => $message_id,
+                    'status' => Deal::REMOTE
                 ]);
 
                 $deal->client()->associate(Client::where('id', $client_id)->first());
-
-                //dd($message_id);
-
-
-//                $deal = new Deal();
-//                $deal->client_id = $client_id;
-//                $deal->date = date('Y-m-d', strtotime($message_meta['date']));
-//                $deal->type = 'deal';
-//                $deal->bid_number = 'na';
-//                $deal->gmail_msg_id = $message_id;
 
                 if (!empty($files)) {
                     foreach ($files as $key => $value) {
@@ -216,7 +220,6 @@ class DealController extends Controller{
 
     }
 
-
     function checkServiceAccountCredentialsFile()
     {
         // service account creds
@@ -224,7 +227,6 @@ class DealController extends Controller{
 
         return file_exists($application_creds) ? $application_creds : false;
     }
-
 
     private function fetchBody($single_message)
     {

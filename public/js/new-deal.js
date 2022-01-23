@@ -118,9 +118,11 @@ $(document).ready(function() {
     changeCheckbox.forEach(function (checkbox){
         checkbox.onchange = function() {
             if(checkbox.checked){
-                $('#attr-for-' + checkbox.dataset.id).addClass('show-attribute')
+                $('#attr-for-' + checkbox.dataset.id).addClass('show-attribute');
+                $('#price-' + checkbox.dataset.id + '-group').removeClass('hidden');
             }else{
-                $('#attr-for-' + checkbox.dataset.id).removeClass('show-attribute')
+                $('#attr-for-' + checkbox.dataset.id).removeClass('show-attribute');
+                $('#price-' + checkbox.dataset.id + '-group').addClass('hidden');
             }
         };
     });

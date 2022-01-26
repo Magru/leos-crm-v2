@@ -21,7 +21,9 @@ class DealCreated extends Mailable
     public function build(){
         return $this->subject('הזמנה חדשה')->view('deal.mail.new')->with([
             'dealID' => $this->deal->id,
-            'link' => route('deal.show', ['id' => $this->deal->id])
+            'link' => route('deal.show', ['id' => $this->deal->id]),
+            'client' => '',
+            'products' => ''
         ]);
     }
 }

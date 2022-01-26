@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'מוצרים')
+@section('title', 'עסקאות')
 @section('content')
 
     <div class="container-fluid">
@@ -27,9 +27,12 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>לקוח</th>
                                         <th>סטטוס</th>
+                                        <th>נציג</th>
                                         <th>תאריך יצירה במערכת</th>
-                                        <th>שדות</th>
+                                        <th>סכום</th>
+                                        <th>תשלום</th>
                                         <th>קבצים</th>
                                     </tr>
                                     </thead>
@@ -37,10 +40,23 @@
                                     @foreach($deals as $count => $_d)
                                         <tr>
                                             <td>{{ $_d->id }}</td>
-                                            <td>{{ $_d->status }}</td>
-                                            <td>{{ date('d/m/Y', strtotime($_d->created_at)) }}</td>
                                             <td>
                                                 {{ $_d->client->name }}
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-pill status-pill mb-1" data-name="{{ $_d->status }}">
+                                                    {{ $_d->status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {{ $_d->user ? $_d->user->name : null }}
+                                            </td>
+                                            <td>{{ date('d/m/Y', strtotime($_d->created_at)) }}</td>
+                                            <td>
+                                                {{ $_d->total_price + $_d->tax_total }} ש״ח
+                                            </td>
+                                            <td>
+                                                {{ $_d->payment() }}
                                             </td>
                                             <td>
                                                 @foreach($_d->getMedia('deal-document') as $_m)

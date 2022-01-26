@@ -110,12 +110,17 @@
                                              style="font-size: 12px;">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-6">
+                                    <div
+                                        class="col-6 deal-user-select @can('manage_deals') user-editable-select @endcan">
                                         <label for="fetch_client_name">נציג</label>
-                                        <select class="form-control client" id="user_id" name="user_id">
+                                        <select class="form-control client " id="user_id" name="user_id">
                                             <option disabled selected>בחר נחיג</option>
                                             @foreach($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                <option value="{{ $user->id }}"
+                                                        @if(Auth::user()->id === $user->id)
+                                                        selected
+                                                    @endif
+                                                >{{ $user->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('user_id')
@@ -146,17 +151,31 @@
                                                        class="mb-0">{{ $product->name }}</label>
 
                                                 <div class="input-group hidden" id="price-{{ $product->id }}-group">
+                                                    <div class="d-flex w-100">
                                                     <span class="input-group-prepend" id="basic-addon2">
-                                                        <label class="input-group-text" for="price-{{ $product->name }}">מחיר</label>
+                                                        <label class="input-group-text"
+                                                               for="price-{{ $product->name }}">מחיר</label>
                                                     </span>
-                                                    <input type="text"
-                                                           value="{{ $product->price }}"
-                                                           id="price-{{ $product->name }}"
-                                                           name="price-{{ $product->name }}"
-                                                           class="form-control" placeholder="מחיר">
+                                                        <input type="text"
+                                                               style="width: 100%"
+                                                               value="{{ $product->price }}"
+                                                               id="price-{{ $product->id }}"
+                                                               name="price-{{ $product->id }}"
+                                                               class="form-control" placeholder="מחיר">
+
+                                                        <span class="input-group-prepend" id="basic-addon2">
+                                                        <label class="input-group-text"
+                                                               for="qty-for-{{ $product->id }}">כמות</label>
+                                                        </span>
+                                                        <input type="number"
+                                                               value="1"
+                                                               id="qty-for-{{ $product->id }}"
+                                                               style="height: 37px; width: 80px;" name="qty-for-{{ $product->id }}">
+                                                    </div>
+
                                                 </div>
 
-                                                <div class="product-attributes mt-3" id="attr-for-{{ $product->id }}">
+                                                <div class="product-attributes mt-3"  id="attr-for-{{ $product->id }}">
                                                     @if($product->data !== 'null')
                                                         @foreach(json_decode($product->data, true) as $index => $_data)
                                                             <?php
@@ -181,8 +200,28 @@
                     </div>
 
 
+                    @if(0)
+                        <div class="col-md-12 pb-4">
+                            @include('deal.card');
+                        </div>
+                    @endif
+
                     <div class="col-md-12 pb-4">
-                        @include('deal.card');
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">תשלום</div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="payment_type">תשלום</label>
+                                        <select name="payment_type" class="form-control" id="payment_type">
+                                            @foreach(\App\Models\Deal::PAYMENT_TYPE as $id => $_type)
+                                                <option value="{{ $id }}">{{ $_type }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-12 pb-4">
@@ -210,16 +249,44 @@
                         </div>
                     </div>
 
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">סיכום</div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="sub_total">סכום ביניים</label>
+                                        <input type="text" class="form-control" name="sub_total" id="sub_total">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="tax">הנחה</label>
+                                        <input type="text" class="form-control" value="0" name="discount" id="discount">
+                                    </div>
+                                    <div class="col-md-6 mt-3" id="tax-value" data-value="{{Config::get('app.tax')}}">
+                                        <label for="tax">מע״מ</label>
+                                        <input type="text" class="form-control" value="" name="tax" id="tax">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label for="tax">סה״כ לתשלום</label>
+                                        <input type="text" class="form-control" style="border: 3px solid red;" value="" name="total" id="total">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="col-md-12 pb-4">
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <button type="button"  class="btn btn-success" id="new-deal-submit"
+                                <button type="button" disabled class="btn btn-success mx-1" id="new-deal-submit"
                                         style=" height: 41px;">
                                     <span style="font-size: 22px;">שדר</span>
                                     <i class="ik ik-check-circle"></i>
                                 </button>
-                                <button class="btn btn-success" id="calculate">
-                                    <span style="font-size: 22px;">שדר</span>
+                                <button class="btn btn-success mx-1" id="calculate" style=" height: 41px;">
+                                    <span style="font-size: 20px;">חישוב סה״כ</span>
                                     <i class="ik ik-check-circle"></i>
                                 </button>
                             </div>

@@ -171,4 +171,26 @@ select.form-control{
         height: auto;
     }
 }
+.deal-user-select{
+    opacity: .5;
+    pointer-events: none;
+    &.user-editable-select{
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+.status-pill{
+    &[data-name="המתנה"]{
+        color: #000;
+        background-color: #ffed4a;
+    }
+    &[data-name="נמשך ממייל"]{
+        color: #fff;
+        background-color: #6c757d;
+    }
+    &[data-name="בעבודה"]{
+        color: #fff;
+        background-color: #38c172;
+    }
+}
 @import 'card';

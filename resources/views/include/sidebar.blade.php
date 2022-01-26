@@ -18,7 +18,7 @@
         <div class="nav-container">
             <nav id="main-menu-navigation" class="navigation-main">
 
-                @can('manage_deals')
+                @can('create_deals')
                     <div class="nav-item {{ ($segment1 == 'pos') ? 'active' : '' }}">
                         <a href="{{ URL::route('deal.new') }}" class="d-flex justify-content-end">
                         <span class=" badge badge-success badge-right">

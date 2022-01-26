@@ -36,6 +36,7 @@ class DealController extends Controller{
         $users = User::all();
         $products = Product::all();
 
+
         return view('deal.new',[
             'users' => $users,
             'products' => $products
@@ -43,6 +44,11 @@ class DealController extends Controller{
     }
 
     public function show($id){
+        $deal = Deal::where('id', $id)->first();
+
+        return view('deal.show', [
+            'deal' => $deal
+        ]);
 
     }
 
@@ -85,6 +91,9 @@ class DealController extends Controller{
         $price_request_num = $request->input('price_request_num');
         $user_id = $request->input('user_id');
         $note = $request->input('order-notes');
+        $tax = $request->input('tax');
+        $total = $request->input('total');
+        $payment_type = $request->input('payment_type');
 
         $products = $request->input('products');
 
@@ -100,7 +109,10 @@ class DealController extends Controller{
             'user_id' => $user_id,
             'note' => $note,
             'date' => now(),
-            'status' => Deal::PENDING
+            'status' => Deal::PENDING,
+            'tax_total' => $tax,
+            'total_price' => $total,
+            'payment_type' => $payment_type
         ]);
 
         foreach ($request->input('document', []) as $file) {
@@ -112,21 +124,18 @@ class DealController extends Controller{
 
         if($products){
             foreach ($products as $_p){
-                $deal->products()->attach($_p, ['attributes' => $request->input('prod-'. $_p .'-attr-data')]);
+                $deal->products()->attach($_p, [
+                    'attributes' => $request->input('prod-'. $_p .'-attr-data'),
+                    'qty' => $request->input('qty-for-'. $_p),
+                    'price_per_single' => $request->input('price-'. $_p),
+                ]);
             }
         }
 
-
         $deal->save();
-//        Mail::raw('עסקה חדשה', function ($message) {
-//            $message->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-//            $message->to('max.folko@gmail.com', 'User Name');
-//        });
-
         foreach (Deal::MAIL_LIST as $recipient){
             Mail::to($recipient)->send(new DealCreated($deal));
         }
-
 
         return redirect()->route('deal.index');
 

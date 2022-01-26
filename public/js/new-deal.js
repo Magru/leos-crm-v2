@@ -127,9 +127,30 @@ $(document).ready(function() {
         };
     });
 
+    $('#calculate').click(function (e){
+        e.preventDefault();
+        let products_price = 0;
+        changeCheckbox.forEach(function (checkbox){
+            if(checkbox.checked){
+                let price =  parseInt($('#price-' + checkbox.dataset.id).val());
+                let qty = parseInt($('#qty-for-' + checkbox.dataset.id).val());
+                products_price += (price * qty);
+            }
+        });
+
+        $('#sub_total').val(products_price);
+        const tax = parseInt($('#tax-value').data('value'));
+        const discount = parseInt($('#discount').val());
+        let tax_value = parseFloat((products_price - discount) * (tax/100) );
+
+        $('#tax').val(tax_value);
+        $('#total').val(parseInt(products_price + tax_value));
+
+        $('#new-deal-submit').prop("disabled", false);
+    });
+
     $('#new-deal-submit').click(function (e){
         e.preventDefault();
-
         changeCheckbox.forEach(function (checkbox){
             if(checkbox.checked){
                 let arr = [];

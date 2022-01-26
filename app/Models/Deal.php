@@ -17,6 +17,12 @@ class Deal extends Model implements HasMedia
     public const APPROVED = 'בעבודה';
     public const REMOTE = 'נמשך ממייל';
 
+    public const PAYMENT_TYPE = [
+        1 => 'אשראי',
+        2 => 'המחאות',
+        3 => 'העברה בנקאית'
+    ];
+
     public const MAIL_LIST = [
         'max.folko@gmail.com'
     ];
@@ -32,11 +38,18 @@ class Deal extends Model implements HasMedia
         'employed_numbers',
         'gmail_msg_id',
         'type',
-        'status'
+        'status',
+        'total_price',
+        'tax_total',
+        'payment_type'
     ];
 
     public function client(){
         return $this->belongsTo(Client::class);
+    }
+
+    public function payment(){
+        return self::PAYMENT_TYPE[$this->payment_type];
     }
 
     public function user(){

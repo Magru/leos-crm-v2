@@ -2,6 +2,15 @@
 
 $(document).ready(function() {
 
+    var changeCheckbox = Array.prototype.slice.call(document.querySelectorAll('.product-switch'));
+    changeCheckbox.forEach(function (checkbox){
+        if(checkbox.checked){
+            $('#attr-for-' + checkbox.dataset.id).addClass('show-attribute');
+            $('#price-' + checkbox.dataset.id + '-group').removeClass('hidden');
+        }
+    });
+
+
     const users = $('#user_id').select2({
         language: {
             inputTooShort: function () {
@@ -113,7 +122,7 @@ $(document).ready(function() {
         var switchery = new Switchery(html,{ size: 'small' });
     });
 
-    var changeCheckbox = Array.prototype.slice.call(document.querySelectorAll('.product-switch'));
+
 
     changeCheckbox.forEach(function (checkbox){
         checkbox.onchange = function() {

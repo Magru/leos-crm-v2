@@ -83,9 +83,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     Route::post('deal/store-media', [DealController::class,'storeDealMedia'])->name('deal.store.media');
+
     Route::group(['middleware' => 'can:create_deals'], function(){
         Route::get('deals/new', [DealController::class,'newOrder'])->name('deal.new');
         Route::post('deal/store', [DealController::class,'store'])->name('deal.store');
+    });
+
+    Route::group(['middleware' => 'can:approve_deals'], function(){
+        Route::get('deals/edit/{id}', [DealController::class,'edit'])->name('deal.edit');
     });
 
     Route::group(['middleware' => 'can:view_deals'], function(){

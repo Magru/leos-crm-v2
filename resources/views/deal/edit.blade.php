@@ -34,14 +34,11 @@
                                     <div class="col-md-10">
                                         <label for="fetch_client_name">שם לקוח</label>
                                         <select class="form-control client" required id="client" name="client">
+                                            <option value="{{ $deal->client->id }}" selected>{{ $deal->client->name }}</option>
                                         </select>
                                         @error('client')
                                         <div class="alert m-0 p-1 alert-danger">{{ $message }}</div>
                                         @enderror
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-end">
-                                        <button class="btn btn-primary" id="new-client" style="height: 35px">לקוח חדש
-                                        </button>
                                     </div>
                                 </div>
 
@@ -56,7 +53,7 @@
                                     <div class="col-md-6">
                                         <label for="client_review">סקור העסק</label>
                                         <input type="text" class="form-control" name="client_review" required
-                                               value="{{ old('client_review') }}"
+                                               value="{{ $deal->client_review }}"
                                                id="client_review">
                                         @error('client_review')
                                         <div class="alert m-0 p-1 alert-danger"
@@ -66,7 +63,7 @@
                                     <div class="col-md-6">
                                         <label for="branch_review">סקור ענפי</label>
                                         <input type="text" class="form-control" name="branch_review" required
-                                               value="{{ old('branch_review') }}"
+                                               value="{{  $deal->branch_review }}"
                                                id="branch_review">
                                         @error('branch_review')
                                         <div class="alert m-0 p-1 alert-danger"
@@ -77,7 +74,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <label for="client_seniority">ותק עסק</label>
-                                        <input type="text" class="form-control" value="{{ old('client_seniority') }}"
+                                        <input type="text" class="form-control" value="{{ $deal->client_seniority }}"
                                                name="client_seniority" required
                                                id="client_seniority">
                                         @error('client_seniority')
@@ -88,6 +85,7 @@
                                     <div class="col-md-6">
                                         <label for="employed_numbers">מספר מועסקים</label>
                                         <input type="text" class="form-control" name="employed_numbers"
+                                               value="{{ $deal->employed_numbers }}"
                                                id="employed_numbers">
                                     </div>
                                 </div>
@@ -103,7 +101,7 @@
                                     <div class="col-md-6">
                                         <label for="client_seniority">מספר הצעת מחיר</label>
                                         <input type="text" class="form-control" name="price_request_num"
-                                               value="{{ old('price_request_num') }}"
+                                               value="{{ $deal->bid_number }}"
                                                id="price_request_num">
                                         @error('price_request_num')
                                         <div class="alert m-0 p-1 alert-danger"
@@ -114,12 +112,11 @@
                                         class="col-6 deal-user-select @can('manage_deals') user-editable-select @endcan">
                                         <label for="fetch_client_name">נציג</label>
                                         <select class="form-control client " id="user_id" name="user_id">
-                                            <option disabled selected>בחר נחיג</option>
                                             @foreach($users as $user)
                                                 <option value="{{ $user->id }}"
-                                                        @if(Auth::user()->id === $user->id)
-                                                        selected
-                                                    @endif
+                                                        @if($deal->user->id === $user->id)
+                                                            selected
+                                                        @endif
                                                 >{{ $user->name }}</option>
                                             @endforeach
                                         </select>
@@ -145,6 +142,9 @@
                                                 <input type="checkbox"
                                                        class="js-switch product-switch"
                                                        data-id="{{ $product->id }}"
+                                                       @if(isset($deal_products[$product->id]))
+                                                        checked
+                                                       @endif
                                                        name="products[]"
                                                        id="product-{{ $product->id }}" value="{{ $product->id }}"/>
                                                 <label for="product-{{ $product->id }}"
@@ -158,9 +158,9 @@
                                                     </span>
                                                         <input type="text"
                                                                style="width: 100%"
-                                                               value="{{ $product->price }}"
                                                                id="price-{{ $product->id }}"
                                                                name="price-{{ $product->id }}"
+                                                               value="@if(isset($deal_products[$product->id])){{ $deal_products[$product->id]['price'] }}@endif"
                                                                class="form-control" placeholder="מחיר">
 
                                                         <span class="input-group-prepend" id="basic-addon2">
@@ -168,7 +168,7 @@
                                                                for="qty-for-{{ $product->id }}">כמות</label>
                                                         </span>
                                                         <input type="number"
-                                                               value="1"
+                                                               value="@if(isset($deal_products[$product->id])){{(int)$deal_products[$product->id]['qty']}}@endif"
                                                                id="qty-for-{{ $product->id }}"
                                                                style="height: 37px; width: 80px;" name="qty-for-{{ $product->id }}">
                                                     </div>
@@ -186,10 +186,11 @@
                                                                    for="{{ $id }}">{{ $_data['title'] }}</label>
 
                                                             @include($template, [
-                                                                    'id' => $id,
-                                                                    'label' => $_data['title'],
-                                                                    'value' => null,
-                                                                    'type' => $_data['type']])
+                                                                'id' => $id,
+                                                                'label' => $_data['title'],
+                                                                'value' => isset($deal_products[$product->id]['attr'][$index]) ?  $deal_products[$product->id]['attr'][$index]['value'] : null,
+                                                                'type' => $_data['type']]
+                                                                )
                                                         @endforeach
                                                         <input type="hidden" name="{{ $id }}-data">
                                                     @endif
@@ -219,7 +220,9 @@
                                         <label for="payment_type">תשלום</label>
                                         <select name="payment_type" class="form-control" id="payment_type">
                                             @foreach(\App\Models\Deal::PAYMENT_TYPE as $id => $_type)
-                                                <option value="{{ $id }}">{{ $_type }}</option>
+                                                <option value="{{ $id }}" @if($deal->payment_type == $id) selected @endif>
+                                                    {{ $_type }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -232,6 +235,22 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="sub-title">מסמכים</div>
+                                <div class="form-group row">
+                                    @foreach($files as $_f)
+                                        <a href="{{ $_f['original_url'] }}" target="_blank" class="col-12 d-flex">
+                                            <i class="ik ik-file-text" style="font-size: 20px; color: #000; text-decoration: none;"></i>
+                                            <p style="font-size: 12px; color: #000; margin-right: 15px;">{{ $_f['file_name'] }}</p>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 pb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="sub-title">מסמכים חדשים</div>
                                 <div class="needsclick dropzone" id="document-dropzone">
 
                                 </div>
@@ -245,8 +264,8 @@
                                 <div class="sub-title">הערות</div>
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="order-notes" id="order-notes"
-                                                  rows="10"></textarea>
+                                        <textarea class="form-control"  name="order-notes" id="order-notes"
+                                                  rows="10">{{ $deal->note }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +280,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <label for="sub_total">סכום ביניים</label>
-                                        <input type="text" class="form-control" name="sub_total" id="sub_total">
+                                        <input type="text" class="form-control" value="{{ $deal->total_price - $deal->tax_total }}" name="sub_total" id="sub_total">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="tax">הנחה</label>
@@ -269,11 +288,11 @@
                                     </div>
                                     <div class="col-md-6 mt-3" id="tax-value" data-value="{{Config::get('app.tax')}}">
                                         <label for="tax">מע״מ</label>
-                                        <input type="text" class="form-control" value="" name="tax" id="tax">
+                                        <input type="text"  class="form-control" value="{{ $deal->tax_total }}" name="tax" id="tax">
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <label for="tax">סה״כ לתשלום</label>
-                                        <input type="text" class="form-control" style="border: 3px solid red;" value="" name="total" id="total">
+                                        <input type="text" class="form-control" style="border: 3px solid red;" value="{{ $deal->total_price }}" name="total" id="total">
                                     </div>
                                 </div>
                             </div>
@@ -454,21 +473,7 @@
                     $('form').find('input[name="document[]"][value="' + name + '"]').remove()
                 },
                 init: function () {
-                    @if(isset($project) && $project->document)
-                    var files =
-                        {!! json_encode($project->document) !!}
-                        for(
-                    var i
-                in
-                    files
-                )
-                    {
-                        var file = files[i]
-                        this.options.addedfile.call(this, file)
-                        file.previewElement.classList.add('dz-complete')
-                        $('form').append('<input type="hidden" name="document[]" value="' + file.file_name + '">')
-                    }
-                    @endif
+
                 }
             }
         </script>

@@ -43,6 +43,8 @@ class DealController extends Controller{
         ]);
     }
 
+
+
     public function show($id){
         $deal = Deal::where('id', $id)->first();
 
@@ -50,6 +52,49 @@ class DealController extends Controller{
             'deal' => $deal
         ]);
 
+    }
+
+    public function edit($id){
+        $deal = Deal::where('id', $id)->first();
+        $users = User::all();
+        $products = Product::all();
+        $pivot_products = $deal->products()->get();
+        $deal_products = [];
+        $files = $deal->getMedia('deal-document');
+        $filesArray = [];
+        foreach ($files->toArray() as $_f){
+            $filesArray[] = [
+                'name' => $_f['name'],
+                'size' => $_f['size'],
+                'path' => $_f['original_url']
+            ];
+        }
+
+        //dd($files->toArray());
+
+
+
+
+
+        foreach ($pivot_products as $d){
+            $deal_products[$d->pivot->product_id] = [
+                'qty' => $d->pivot->qty,
+                'price' => $d->pivot->price_per_single,
+                'attr' => json_decode($d->pivot->attributes, true),
+            ];
+        }
+
+
+
+
+        return view('deal.edit', [
+            'deal' => $deal,
+            'users' => $users,
+            'products' => $products,
+            'deal_products' => $deal_products,
+            'files' => $files->toArray(),
+            'filesArray' => $filesArray
+        ]);
     }
 
     public function storeDealMedia(Request $request){
@@ -83,6 +128,8 @@ class DealController extends Controller{
         ]);
 
 
+        $id = $request->input('id');
+
         $client = $request->input('client');
         $review = $request->input('client_review');
         $branch_review = $request->input('branch_review');
@@ -94,26 +141,40 @@ class DealController extends Controller{
         $tax = $request->input('tax');
         $total = $request->input('total');
         $payment_type = $request->input('payment_type');
-
+        $status = $request->input('status');
         $products = $request->input('products');
 
 
+        $deal = Deal::firstOrCreate(['id' => $id]);
+        $deal->client_review = $review;
+        $deal->branch_review = $branch_review;
+        $deal->client_seniority = $client_seniority;
+        $deal->employed_numbers = $employed_numbers;
+        $deal->bid_number = $price_request_num;
+        $deal->user_id = $user_id;
+        $deal->note = $note;
+        $deal->date = now();
+        $deal->status = $status ?: Deal::PENDING;
+        $deal->tax_total = $tax;
+        $deal->total_price = $total;
+        $deal->payment_type = $payment_type;
+        $deal->save();
 
 
-        $deal = Deal::create([
-            'client_review' => $review,
-            'branch_review' => $branch_review,
-            'client_seniority' => $client_seniority,
-            'employed_numbers' => $employed_numbers,
-            'bid_number' => $price_request_num,
-            'user_id' => $user_id,
-            'note' => $note,
-            'date' => now(),
-            'status' => Deal::PENDING,
-            'tax_total' => $tax,
-            'total_price' => $total,
-            'payment_type' => $payment_type
-        ]);
+//        $deal = Deal::create([
+//            'client_review' => $review,
+//            'branch_review' => $branch_review,
+//            'client_seniority' => $client_seniority,
+//            'employed_numbers' => $employed_numbers,
+//            'bid_number' => $price_request_num,
+//            'user_id' => $user_id,
+//            'note' => $note,
+//            'date' => now(),
+//            'status' => Deal::PENDING,
+//            'tax_total' => $tax,
+//            'total_price' => $total,
+//            'payment_type' => $payment_type
+//        ]);
 
         foreach ($request->input('document', []) as $file) {
             $deal->addMedia(storage_path('tmp/deals/' . $file))->toMediaCollection('deal-document');
@@ -133,6 +194,8 @@ class DealController extends Controller{
         }
 
         $deal->save();
+
+
         foreach (Deal::MAIL_LIST as $recipient){
             Mail::to($recipient)->send(new DealCreated($deal));
         }

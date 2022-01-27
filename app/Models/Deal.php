@@ -58,6 +58,6 @@ class Deal extends Model implements HasMedia
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('attributes');
+        return $this->belongsToMany(Product::class)->withPivot('attributes', 'qty', 'price_per_single');
     }
 }

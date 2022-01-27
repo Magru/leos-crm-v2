@@ -41,7 +41,7 @@
                                         <tr>
                                             <td>{{ $_d->id }}</td>
                                             <td>
-                                                {{ $_d->client->name }}
+                                                @if($_d->client) {{ $_d->client->name }} @endif
                                             </td>
                                             <td>
                                                 <span class="badge badge-pill status-pill mb-1" data-name="{{ $_d->status }}">
@@ -72,9 +72,12 @@
                                     <tfoot>
                                     <tr>
                                         <th>ID</th>
+                                        <th>לקוח</th>
                                         <th>סטטוס</th>
+                                        <th>נציג</th>
                                         <th>תאריך יצירה במערכת</th>
-                                        <th>שדות</th>
+                                        <th>סכום</th>
+                                        <th>תשלום</th>
                                         <th>קבצים</th>
                                     </tr>
                                     </tfoot>

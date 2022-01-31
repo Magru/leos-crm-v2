@@ -43,15 +43,15 @@ class Monday extends Controller{
             ->addItem( '#' . $id . ' ' . $client_name, $column_values );
     }
 
-    public function addSubItemToItem($board_id, $id_group, $parent, $name){
+    public function addSubItemToItem($board_id, $id_group, $parent, $name, $data = []){
         return $this->monday->on($board_id)
             ->group($id_group)
-            ->addSubItem($parent, $name);
+            ->addSubItem($parent, $name, $data);
     }
 
 
-    public function updateDealItemPulse($deal, $status, $item_id){
+    public function updateDealItemPulse($deal, $status, $item_id, $prod = null){
         $rec = 'leosmediainteractive_pulse_'.$item_id.'_d992228c72f8b3ee4af3__13018949@use1.mx.monday.com';
-        Mail::to($rec)->send(new DealCreated($deal, $status));
+        Mail::to($rec)->send(new DealCreated($deal, $status, $prod));
     }
 }

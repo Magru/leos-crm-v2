@@ -144,7 +144,7 @@ class DealController extends Controller
         $status = $request->input('status');
         $products = $request->input('products');
 
-
+        //@TODO disable create duplicate
         $deal = Deal::updateOrCreate(['id' => $id], [
             'client_review' => $review,
             'branch_review' => $branch_review,
@@ -204,10 +204,21 @@ class DealController extends Controller
                 $pivot_products = $deal->products()->get();
                 if ($pivot_products) {
                     foreach ($pivot_products as $pp) {
-                        $monday->addSubItemToItem($this->monday_deal_board,
-                            'topics',
-                            $monday_res['create_item']['id'],
-                            Product::find($pp->pivot->product_id)->name);
+                        $prod = Product::find($pp->pivot->product_id);
+                        $data = [
+                            'numbers' => $pp->pivot->qty
+                        ];
+
+                        $subitem_res = $monday->addSubItemToItem($this->monday_deal_board, 'topics', $monday_res['create_item']['id'], $prod->name, $data);
+
+                        if($pp->pivot->attributes){
+                            $product_data = [
+                                'product_deal_data' => $pp->pivot->attributes
+                            ];
+
+                            $monday->updateDealItemPulse($deal, 'deal_item_update', $subitem_res['create_subitem']['id'], $product_data);
+                        }
+
                     }
                 }
             }

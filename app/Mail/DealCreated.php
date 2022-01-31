@@ -15,15 +15,25 @@ class DealCreated extends Mailable
 
     protected $deal;
     private $type;
+    private $product_data;
 
-    public function __construct(Deal $deal, $type){
+    public function __construct(Deal $deal, $type, $product_data = null){
         $this->deal = $deal;
         $this->type = $type;
+        $this->product_data = $product_data;
     }
 
     public function build(){
 
-        if($this->type === Deal::APPROVED){
+
+        if($this->type == 'deal_item_update'){
+            if($this->product_data['product_deal_data']){
+                $data = json_decode($this->product_data['product_deal_data']);
+                return $this->subject('פרטי מוצר')->view('deal.mail.subitem')->with([
+                    'data' => $data
+                ]);
+            }
+        }elseif($this->type === Deal::APPROVED){
 
             $pivot_products = $this->deal->products()->get();
             $products = [];
@@ -59,14 +69,14 @@ class DealCreated extends Mailable
 
             return $mail;
 
+        }else{
+            return $this->subject('הזמנה חדשה לאישור')->view('deal.mail.new')->with([
+                'dealID' => $this->deal->id,
+                'link' => route('deal.edit', ['id' => $this->deal->id]),
+                'client' => $this->deal->client->name,
+                'total' => $this->deal->total_price + $this->deal->tax_total,
+                'products' => ''
+            ]);
         }
-
-        return $this->subject('הזמנה חדשה לאישור')->view('deal.mail.new')->with([
-            'dealID' => $this->deal->id,
-            'link' => route('deal.edit', ['id' => $this->deal->id]),
-            'client' => $this->deal->client->name,
-            'total' => $this->deal->total_price + $this->deal->tax_total,
-            'products' => ''
-        ]);
     }
 }

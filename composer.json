@@ -19,6 +19,7 @@
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.1",
         "mews/purifier": "^3.2",
+        "proclame/monday-api-laravel": "^0.2.0",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-permission": "^3.11",
         "yajra/laravel-datatables-oracle": "~9.0"

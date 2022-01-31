@@ -18,6 +18,7 @@ class Deal extends Model implements HasMedia
     public const REMOTE = 'נמשך ממייל';
 
     public const PAYMENT_TYPE = [
+        0 => 'אין',
         1 => 'אשראי',
         2 => 'המחאות',
         3 => 'העברה בנקאית'

@@ -7,7 +7,7 @@ use App\Models\Client;
 use App\Models\Deal;
 use App\Models\Product;
 use App\Models\User;
-use DOMDocument;
+use Carbon\Carbon;
 use Google_Client;
 use Google_Service_Gmail;
 use Illuminate\Http\Request;
@@ -17,12 +17,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
+
 class DealController extends Controller{
 
     private $fetch_mails = [
         'office@leos.co.il',
         'order@leos.co.il'
     ];
+
+    public  $monday_deal_board = '2219425041';
 
     public function index(){
         $deals = Deal::all();
@@ -70,12 +73,6 @@ class DealController extends Controller{
             ];
         }
 
-        //dd($files->toArray());
-
-
-
-
-
         foreach ($pivot_products as $d){
             $deal_products[$d->pivot->product_id] = [
                 'qty' => $d->pivot->qty,
@@ -83,9 +80,6 @@ class DealController extends Controller{
                 'attr' => json_decode($d->pivot->attributes, true),
             ];
         }
-
-
-
 
         return view('deal.edit', [
             'deal' => $deal,
@@ -128,7 +122,7 @@ class DealController extends Controller{
         ]);
 
 
-        $id = $request->input('id');
+        $id = $request->input('deal_id');
 
         $client = $request->input('client');
         $review = $request->input('client_review');
@@ -145,11 +139,12 @@ class DealController extends Controller{
         $products = $request->input('products');
 
 
-        $deal = Deal::firstOrCreate(['id' => $id]);
-        $deal->client_review = $review;
-        $deal->branch_review = $branch_review;
-        $deal->client_seniority = $client_seniority;
-        $deal->employed_numbers = $employed_numbers;
+        $deal = Deal::updateOrCreate(['id' => $id],[
+            'client_review' => $review,
+            'branch_review' => $branch_review,
+            'client_seniority' => $client_seniority,
+            'employed_numbers' => $employed_numbers
+        ]);
         $deal->bid_number = $price_request_num;
         $deal->user_id = $user_id;
         $deal->note = $note;
@@ -160,30 +155,15 @@ class DealController extends Controller{
         $deal->payment_type = $payment_type;
         $deal->save();
 
-
-//        $deal = Deal::create([
-//            'client_review' => $review,
-//            'branch_review' => $branch_review,
-//            'client_seniority' => $client_seniority,
-//            'employed_numbers' => $employed_numbers,
-//            'bid_number' => $price_request_num,
-//            'user_id' => $user_id,
-//            'note' => $note,
-//            'date' => now(),
-//            'status' => Deal::PENDING,
-//            'tax_total' => $tax,
-//            'total_price' => $total,
-//            'payment_type' => $payment_type
-//        ]);
-
         foreach ($request->input('document', []) as $file) {
             $deal->addMedia(storage_path('tmp/deals/' . $file))->toMediaCollection('deal-document');
         }
-
-        $deal->client()->associate(Client::where('id', $client)->first());
+        $clientObject = Client::where('id', $client)->first();
+        $deal->client()->associate($clientObject);
         $deal->user()->associate(User::where('id', $user_id)->first());
 
         if($products){
+            $deal->products()->detach();
             foreach ($products as $_p){
                 $deal->products()->attach($_p, [
                     'attributes' => $request->input('prod-'. $_p .'-attr-data'),
@@ -196,9 +176,39 @@ class DealController extends Controller{
         $deal->save();
 
 
-        foreach (Deal::MAIL_LIST as $recipient){
-            Mail::to($recipient)->send(new DealCreated($deal));
+        if($status == Deal::PENDING){
+            foreach (Deal::MAIL_LIST as $recipient){
+                Mail::to($recipient)->send(new DealCreated($deal, Deal::PENDING));
+            }
         }
+
+        if($status == Deal::APPROVED){
+            $monday = new Monday();
+            $monday_res = $monday->addItemsOnBoard($this->monday_deal_board, 'topics',  $clientObject->name, $deal->id);
+            if($monday_res){
+                $deal->monday_pulse = $monday_res['create_item']['id'];
+                $pivot_products = $deal->products()->get();
+                if($pivot_products){
+                    foreach ($pivot_products as $pp){
+                        $monday->addSubItemToItem($this->monday_deal_board,
+                            'topics',
+                            $monday_res['create_item']['id'],
+                            Product::find($pp->pivot->product_id)->name );
+                    }
+                }
+            }
+
+
+            $monday->updateDealItemPulse($deal, Deal::APPROVED, $monday_res['create_item']['id']);
+
+
+
+            //test
+            Mail::to('max.folko@gmail.com')->send(new DealCreated($deal, Deal::APPROVED));
+        }
+
+
+        $deal->save();
 
         return redirect()->route('deal.index');
 
@@ -260,14 +270,18 @@ class DealController extends Controller{
 
                 $files = $this->getAttachments($message_id, $single_message->getPayload()->parts, $gmail);
 
+                //dd(Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s'));
+
                 $deal = Deal::firstOrCreate([
                     'gmail_msg_id' => $message_id
                 ],[
-                    'date' => date('Y-m-d', strtotime($message_meta['date'])),
+                    //'date' => date('Y-m-d', strtotime($message_meta['date'])),
+                    //'date' => Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s'),
                     'type' => 'deal',
                     'bid_number' => 'na',
                     'gmail_msg_id' => $message_id,
-                    'status' => Deal::REMOTE
+                    'status' => Deal::REMOTE,
+                    'payment_type' => 0
                 ]);
 
                 $deal->client()->associate(Client::where('id', $client_id)->first());
@@ -282,6 +296,7 @@ class DealController extends Controller{
                         $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal-document');
                     }
                 }
+                $deal->date = Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s');
                 $deal->save();
 
 

@@ -283,16 +283,24 @@
 
                     <div class="col-md-12 pb-4">
                         <div class="card">
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <button type="button" disabled class="btn btn-success mx-1" id="new-deal-submit"
-                                        style=" height: 41px;">
-                                    <span style="font-size: 22px;">שדר</span>
-                                    <i class="ik ik-check-circle"></i>
-                                </button>
-                                <button class="btn btn-success mx-1" id="calculate" style=" height: 41px;">
-                                    <span style="font-size: 20px;">חישוב סה״כ</span>
-                                    <i class="ik ik-check-circle"></i>
-                                </button>
+                            <div class="card-body d-flex align-items-center justify-content-center row">
+                                <div class="col-4 d-flex align-content-center">
+                                    <label for="status" class="d-flex align-items-center mb-0 ml-3 pb-0">סטטוס</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="המתנה" selected>המתנה</option>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <button type="button" disabled class="btn btn-success mx-1" id="new-deal-submit"
+                                            style=" height: 41px;">
+                                        <span style="font-size: 22px;">שדר</span>
+                                        <i class="ik ik-check-circle"></i>
+                                    </button>
+                                    <button class="btn btn-success mx-1" id="calculate" style=" height: 41px;">
+                                        <span style="font-size: 20px;">חישוב סה״כ</span>
+                                        <i class="ik ik-check-circle"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -8,7 +8,7 @@
     @endpush
 
 
-    <div class="container">
+    <div class="container" >
         <div class="page-header">
             <div class="row align-items-end">
                 <div class="col-lg-8 d-flex justify-content-start">
@@ -25,6 +25,7 @@
 
             <form class="new-deal-form" method="POST" action="{{ route('deal.store') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
+                <input type="hidden" name="deal_id" id="dela_id" value="{{ $deal->id }}">
                 <div class="row mt-3">
                     <div class="col-md-12 pb-4">
                         <div class="card">
@@ -303,15 +304,28 @@
                     <div class="col-md-12 pb-4">
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <button type="button" disabled class="btn btn-success mx-1" id="new-deal-submit"
-                                        style=" height: 41px;">
-                                    <span style="font-size: 22px;">שדר</span>
-                                    <i class="ik ik-check-circle"></i>
-                                </button>
-                                <button class="btn btn-success mx-1" id="calculate" style=" height: 41px;">
-                                    <span style="font-size: 20px;">חישוב סה״כ</span>
-                                    <i class="ik ik-check-circle"></i>
-                                </button>
+                                <div class="form-group row w-100">
+                                    <div class="col-6">
+                                        <select name="status" id="status" class="form-control">
+                                            <option selected disabled>סטטוס</option>
+                                            <option value="בעבודה">בעבודה</option>
+                                            <option value="בוטלה">בוטלה</option>
+                                            <option value="המתנה">המתנה</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" disabled class="btn btn-success mx-1" id="new-deal-submit"
+                                                style=" height: 41px;">
+                                            <span style="font-size: 22px;">שדר</span>
+                                            <i class="ik ik-check-circle"></i>
+                                        </button>
+                                        <button class="btn btn-success mx-1" id="calculate" style=" height: 41px;">
+                                            <span style="font-size: 20px;">חישוב סה״כ</span>
+                                            <i class="ik ik-check-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -323,116 +337,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="new_client_modal" tabindex="-1" role="dialog" aria-labelledby="new_client_modal-label"
-         aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <form id="remote-add-client" class="has-repeater">
-                    @csrf
-                    <div class="modal-header d-flex justify-content-between align-content-center">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            לקוח חדש
-                        </h5>
-                        <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="card">
-                            <div class="card-header"><h3>פרטי לקוח</h3></div>
-                            <div class="card-body">
-                                <div class="row mb-3">
-                                    <div class="form-group col-sm-12 row">
-                                        <label for="name" class="col-sm-12 col-form-label">שם לקוח</label>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" required name="name" id="name"
-                                                   placeholder="שם לקוח">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-12 row">
-                                        <label for="rank" class="col-sm-12 col-form-label">דירוג</label>
-                                        <div class="col-sm-12">
-                                            <select class="form-control" id="rank" name="rank">
-                                                <option value="a">A</option>
-                                                <option value="b">B</option>
-                                                <option value="c">C</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-12 row">
-                                        <label for="name" class="col-sm-12 col-form-label">ח״פ</label>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" required name="company_id"
-                                                   id="company_id"
-                                                   placeholder="ח״פ">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h4 class="sub-title">אנשי קשר</h4>
-                                <div class="form-group row">
-                                    <div data-repeater-list="contact_persons" class="pl-3">
-                                        <div data-repeater-item class="d-flex mb-2">
-
-                                            <label class="sr-only"
-                                                   for="inlineFormInputGroup1">{{ __('Users')}}</label>
-                                            <div class="form-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input type="text" class="form-control" name="contact-name"
-                                                       placeholder="שם">
-                                            </div>
-                                            <div class="form-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input type="email" class="form-control" name="contact-email"
-                                                       placeholder="מייל">
-                                            </div>
-                                            <div class="form-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input type="text" class="form-control" name="contact-tel"
-                                                       placeholder="מספר טלפון">
-                                            </div>
-                                            <div class="form-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input type="text" class="form-control" name="contact-role"
-                                                       placeholder="תפקיד">
-                                            </div>
-                                            <button data-repeater-delete type="button"
-                                                    class="btn btn-danger repeater-remove-btn btn-icon mr-2"><i
-                                                    class="ik ik-trash-2"></i></button>
-                                        </div>
-                                    </div>
-                                    <button data-repeater-create type="button"
-                                            class="btn btn-success btn-icon mr-2  repeater-add-btn"><i
-                                            class="ik ik-plus"></i></button>
-                                </div>
-
-
-                                <h4 class="sub-title">כתובות</h4>
-                                <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <label for="city">עיר</label>
-                                        <input type="text" name="city" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="address">כתובת</label>
-                                        <input type="text" name="address" class="form-control">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="zip">מיקוד</label>
-                                        <input type="text" name="zip" class="form-control">
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <img src="{{ asset('img/loader.svg')}}" id="remote-add-loader" alt="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">סגור</button>
-                        <button type="submit" class="btn btn-primary">שמור</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- push external js -->
     @push('script')

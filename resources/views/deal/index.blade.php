@@ -34,6 +34,7 @@
                                         <th>סכום</th>
                                         <th>תשלום</th>
                                         <th>קבצים</th>
+                                        <th>Monday</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -65,6 +66,13 @@
                                                     </a>
                                                 @endforeach
                                             </td>
+                                            <td>
+                                                @if($_d->monday_pulse)
+                                                <a href="https://leosmediainteractive.monday.com/boards/2219425041/pulses/{{ $_d->monday_pulse }}" target="_blank">
+                                                    <img src="{{ asset('img/monday_logo.png') }}" width="35" height="35" alt="Monday Logo">
+                                                </a>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -79,6 +87,7 @@
                                         <th>סכום</th>
                                         <th>תשלום</th>
                                         <th>קבצים</th>
+                                        <th>Monday</th>
                                     </tr>
                                     </tfoot>
                                 </table>

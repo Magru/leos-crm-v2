@@ -26,20 +26,14 @@ class Monday extends Controller{
 //        dd($this->monday->getBoards());
     }
 
-    public function addItemsOnBoard($board_id, $id_group, $client_name, $id){
+    public function addItemsOnBoard($board_id, $id_group, $client_name, $id, $monday_users){
+
+
+
         $column_values = [
             'text' => $client_name,
             'person' => [
-                'personsAndTeams' => [
-                    [
-                        'id' => '13018949',
-                        'kind' => 'person'
-                    ],
-                    [
-                        'id' => '26006020',
-                        'kind' => 'person'
-                    ]
-                ]
+                'personsAndTeams' => $monday_users
             ]
         ];
 

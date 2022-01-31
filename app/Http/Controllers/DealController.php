@@ -18,37 +18,40 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 
-class DealController extends Controller{
+class DealController extends Controller
+{
 
     private $fetch_mails = [
         'office@leos.co.il',
         'order@leos.co.il'
     ];
 
-    public  $monday_deal_board = '2219425041';
+    public $monday_deal_board = '2219425041';
 
-    public function index(){
+    public function index()
+    {
         $deals = Deal::all();
         return view('deal.index', [
             'deals' => $deals
         ]);
     }
 
-    public function newOrder() :View{
+    public function newOrder(): View
+    {
 
         $users = User::all();
         $products = Product::all();
 
 
-        return view('deal.new',[
+        return view('deal.new', [
             'users' => $users,
             'products' => $products
         ]);
     }
 
 
-
-    public function show($id){
+    public function show($id)
+    {
         $deal = Deal::where('id', $id)->first();
 
         return view('deal.show', [
@@ -57,7 +60,8 @@ class DealController extends Controller{
 
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $deal = Deal::where('id', $id)->first();
         $users = User::all();
         $products = Product::all();
@@ -65,7 +69,7 @@ class DealController extends Controller{
         $deal_products = [];
         $files = $deal->getMedia('deal-document');
         $filesArray = [];
-        foreach ($files->toArray() as $_f){
+        foreach ($files->toArray() as $_f) {
             $filesArray[] = [
                 'name' => $_f['name'],
                 'size' => $_f['size'],
@@ -73,7 +77,7 @@ class DealController extends Controller{
             ];
         }
 
-        foreach ($pivot_products as $d){
+        foreach ($pivot_products as $d) {
             $deal_products[$d->pivot->product_id] = [
                 'qty' => $d->pivot->qty,
                 'price' => $d->pivot->price_per_single,
@@ -91,7 +95,8 @@ class DealController extends Controller{
         ]);
     }
 
-    public function storeDealMedia(Request $request){
+    public function storeDealMedia(Request $request)
+    {
         $path = storage_path('tmp/deals');
 
         if (!file_exists($path)) {
@@ -105,12 +110,13 @@ class DealController extends Controller{
         $file->move($path, $name);
 
         return response()->json([
-            'name'          => $name,
+            'name' => $name,
             'original_name' => $file->getClientOriginalName(),
         ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
 
         $request->validate([
@@ -139,7 +145,7 @@ class DealController extends Controller{
         $products = $request->input('products');
 
 
-        $deal = Deal::updateOrCreate(['id' => $id],[
+        $deal = Deal::updateOrCreate(['id' => $id], [
             'client_review' => $review,
             'branch_review' => $branch_review,
             'client_seniority' => $client_seniority,
@@ -160,15 +166,17 @@ class DealController extends Controller{
         }
         $clientObject = Client::where('id', $client)->first();
         $deal->client()->associate($clientObject);
-        $deal->user()->associate(User::where('id', $user_id)->first());
 
-        if($products){
+        $system_user = User::where('id', $user_id)->first();
+        $deal->user()->associate($system_user);
+
+        if ($products) {
             $deal->products()->detach();
-            foreach ($products as $_p){
+            foreach ($products as $_p) {
                 $deal->products()->attach($_p, [
-                    'attributes' => $request->input('prod-'. $_p .'-attr-data'),
-                    'qty' => $request->input('qty-for-'. $_p),
-                    'price_per_single' => $request->input('price-'. $_p),
+                    'attributes' => $request->input('prod-' . $_p . '-attr-data'),
+                    'qty' => $request->input('qty-for-' . $_p),
+                    'price_per_single' => $request->input('price-' . $_p),
                 ]);
             }
         }
@@ -176,31 +184,36 @@ class DealController extends Controller{
         $deal->save();
 
 
-        if($status == Deal::PENDING){
-            foreach (Deal::MAIL_LIST as $recipient){
+        if ($status == Deal::PENDING) {
+            foreach (Deal::MAIL_LIST as $recipient) {
                 Mail::to($recipient)->send(new DealCreated($deal, Deal::PENDING));
             }
         }
 
-        if($status == Deal::APPROVED){
+        if ($status == Deal::APPROVED) {
             $monday = new Monday();
-            $monday_res = $monday->addItemsOnBoard($this->monday_deal_board, 'topics',  $clientObject->name, $deal->id);
-            if($monday_res){
+            $monday_users = [
+                [
+                    'id' => $system_user->monday_id,
+                    'kind' => 'person'
+                ],
+            ];
+            $monday_res = $monday->addItemsOnBoard($this->monday_deal_board, 'topics', str_replace('"', '', $clientObject->name), $deal->id, $monday_users);
+            if ($monday_res) {
                 $deal->monday_pulse = $monday_res['create_item']['id'];
                 $pivot_products = $deal->products()->get();
-                if($pivot_products){
-                    foreach ($pivot_products as $pp){
+                if ($pivot_products) {
+                    foreach ($pivot_products as $pp) {
                         $monday->addSubItemToItem($this->monday_deal_board,
                             'topics',
                             $monday_res['create_item']['id'],
-                            Product::find($pp->pivot->product_id)->name );
+                            Product::find($pp->pivot->product_id)->name);
                     }
                 }
             }
 
 
             $monday->updateDealItemPulse($deal, Deal::APPROVED, $monday_res['create_item']['id']);
-
 
 
             //test
@@ -214,9 +227,10 @@ class DealController extends Controller{
 
     }
 
-    public function updateDealTimeline(Client $client){
+    public function updateDealTimeline(Client $client)
+    {
 
-        foreach ($this->fetch_mails as $_mail){
+        foreach ($this->fetch_mails as $_mail) {
             $this->fetchClientDeal($client->name, $client->id, $_mail);
         }
 
@@ -274,7 +288,7 @@ class DealController extends Controller{
 
                 $deal = Deal::firstOrCreate([
                     'gmail_msg_id' => $message_id
-                ],[
+                ], [
                     //'date' => date('Y-m-d', strtotime($message_meta['date'])),
                     //'date' => Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s'),
                     'type' => 'deal',
@@ -290,10 +304,10 @@ class DealController extends Controller{
                     foreach ($files as $key => $value) {
                         $image_64 = $value['data'];
                         $deal_note = $this->get_string_between($message_meta['body'], '<body>', '</body>');
-                        if($deal_note){
+                        if ($deal_note) {
                             $deal->note = $deal_note;
                         }
-                        $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40).'.pdf')->toMediaCollection('deal-document');
+                        $deal->addMediaFromBase64($image_64)->usingFileName(Str::random(40) . '.pdf')->toMediaCollection('deal-document');
                     }
                 }
                 $deal->date = Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s');
@@ -402,7 +416,8 @@ class DealController extends Controller{
         return $decodedMessage;
     }
 
-    private function get_string_between($string, $start, $end){
+    private function get_string_between($string, $start, $end)
+    {
         $string = ' ' . $string;
         $ini = strpos($string, $start);
         if ($ini == 0) return '';
@@ -411,7 +426,8 @@ class DealController extends Controller{
         return substr($string, $ini, $len);
     }
 
-    function getMessageMetaFromHeaders($headers){
+    function getMessageMetaFromHeaders($headers)
+    {
         $meta = [
             'from' => null,
             'to' => null,

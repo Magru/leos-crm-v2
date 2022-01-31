@@ -51,7 +51,7 @@
     </tbody>
 </table>
 <p style="text-align: center">
-    @if($_d->monday_pulse)
+    @if($monday)
         <a href="https://leosmediainteractive.monday.com/boards/2219425041/pulses/{{ $monday }}" target="_blank">
             <img src="{{ asset('img/monday_logo.png') }}" width="80" height="80" alt="Monday Logo">
         </a>

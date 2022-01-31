@@ -11,25 +11,16 @@
     	<div class="page-header">
             <div class="row align-items-end">
                 <div class="col-lg-8">
-                    <div class="page-header-title">
+                    <div class="page-header-title d-flex align-items-center">
                         <i class="ik ik-award bg-blue"></i>
-                        <div class="d-inline">
-                            <h5>{{ __('Roles')}}</h5>
-                            <span>{{ __('Define roles of user')}}</span>
+                        <div class="">
+                            <h5 class="d-flex">תפקידים</h5>
+                            <span></span>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <nav class="breadcrumb-container" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="../index.html"><i class="ik ik-home"></i></a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="#">{{ __('Roles')}}</a>
-                            </li>
-                        </ol>
-                    </nav>
+
                 </div>
             </div>
         </div>
@@ -41,19 +32,19 @@
             @can('manage_role')
 			<div class="col-md-12">
 	            <div class="card">
-	                <div class="card-header"><h3>{{ __('Add Role')}}</h3></div>
+	                <div class="card-header"><h3>הוסף תפקיד</h3></div>
 	                <div class="card-body">
 	                    <form class="forms-sample" method="POST" action="{{url('role/create')}}">
 	                    	@csrf
 	                        <div class="row">
 	                            <div class="col-sm-5">
 	                                <div class="form-group">
-	                                    <label for="role">{{ __('Role')}}<span class="text-red">*</span></label>
-	                                    <input type="text" class="form-control is-valid" id="role" name="name" placeholder="Role Name" required>
+	                                    <label for="role">תפקיד<span class="text-red">*</span></label>
+	                                    <input type="text" class="form-control is-valid" id="role" name="name" placeholder="כותרת" required>
 	                                </div>
 	                            </div>
-	                            <div class="col-sm-7">
-	                                <label for="exampleInputEmail3">{{ __('Assign Permission')}} </label>
+	                            <div class="col-sm-7" style="direction: rtl; text-align: right">
+	                                <label for="exampleInputEmail3">שיוך הרשאות</label>
 	                                <div class="row">
 	                                	@foreach($permissions as $key => $permission)
 	                                	<div class="col-sm-4">
@@ -70,7 +61,7 @@
 	                                </div>
 
 	                                <div class="form-group">
-	                                	<button type="submit" class="btn btn-primary btn-rounded">{{ __('Save')}}</button>
+	                                	<button type="submit" class="btn btn-primary btn-rounded">שמור</button>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -83,14 +74,14 @@
 		<div class="row">
 	        <div class="col-md-12">
 	            <div class="card p-3">
-	                <div class="card-header"><h3>{{ __('Roles')}}</h3></div>
+	                <div class="card-header"><h3>תפקידים</h3></div>
 	                <div class="card-body">
-	                    <table id="roles_table" class="table">
-	                        <thead>
+	                    <table id="roles_table" class="table" style="text-align: right; direction: rtl;">
+	                        <thead style="text-align: right; direction: rtl;">
 	                            <tr>
-	                                <th>{{ __('Role')}}</th>
-	                                <th>{{ __('Permissions')}}</th>
-	                                <th>{{ __('Action')}}</th>
+	                                <th>תפקיד</th>
+	                                <th>הרשאות</th>
+	                                <th></th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>

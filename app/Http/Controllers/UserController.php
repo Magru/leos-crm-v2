@@ -97,12 +97,14 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
+
         try {
             // store user information
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'monday_id' => $request->monday_id
             ]);
 
 
@@ -179,6 +181,7 @@ class UserController extends Controller
                 $payload = [
                     'name' => $request->name,
                     'email' => $request->email,
+                    'monday_id' => $request->monday_id
                 ];
                 // update password if user input a new password
                 if (isset($request->password) && $request->password) {
@@ -189,10 +192,10 @@ class UserController extends Controller
                 // sync user role
                 $user->syncRoles($request->role);
 
-                return redirect()->back()->with('success', 'User information updated succesfully!');
+                return redirect()->back()->with('success', 'עודכן בהצלחה');
             }
 
-            return redirect()->back()->with('error', 'Failed to update user! Try again.');
+            return redirect()->back()->with('error', 'העדכון נכשל');
         } catch (\Exception $e) {
             $bug = $e->getMessage();
 
@@ -211,9 +214,9 @@ class UserController extends Controller
         if ($user = User::find($id)) {
             $user->delete();
 
-            return redirect('users')->with('success', 'User removed!');
+            return redirect('users')->with('success', 'משתמש נמחק');
         }
 
-        return redirect('users')->with('error', 'User not found');
+        return redirect('users')->with('error', 'לא נמצא');
     }
 }

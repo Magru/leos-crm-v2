@@ -4,19 +4,27 @@
     $(document).ready(function()
     {
         var searchable = [];
-        var selectable = []; 
-        
+        var selectable = [];
+
 
         var dTable = $('#roles_table').DataTable({
 
             order: [],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            processing: true,
             responsive: false,
             serverSide: true,
             processing: true,
             language: {
-              processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>'
+                processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>',
+                lengthMenu: "הצג _MENU_ רשומות",
+                search: "חיפוש:",
+                info:  "מציג _START_ עד _END_ מ-_TOTAL_ תוצאות",
+                paginate: {
+                    "first":      "ראשון",
+                    "last":       "אחרון",
+                    "next":       "הבא",
+                    "previous":   "קודם"
+                },
             },
             scroller: {
                 loadingIndicator: false
@@ -35,61 +43,7 @@
 
             ],
             buttons: [
-                {
-                    extend: 'copy',
-                    className: 'btn-sm btn-info',
-                    title: 'Roles',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'csv',
-                    className: 'btn-sm btn-success',
-                    title: 'Roles',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn-sm btn-warning',
-                    title: 'Roles',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible',
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn-sm btn-primary',
-                    title: 'Roles',
-                    pageSize: 'A2',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    className: 'btn-sm btn-default',
-                    title: 'Roles',
-                    // orientation:'landscape',
-                    pageSize: 'A2',
-                    header: true,
-                    footer: false,
-                    orientation: 'landscape',
-                    exportOptions: {
-                        // columns: ':visible',
-                        stripHtml: false
-                    }
-                }
+
             ],
             initComplete: function () {
                 var api =  this.api();
@@ -135,19 +89,26 @@
     {
 
         var searchable = [];
-        var selectable = []; 
-        
+        var selectable = [];
+
 
         var dTable = $('#user_table').DataTable({
-
             order: [],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            processing: true,
             responsive: false,
             serverSide: true,
             processing: true,
             language: {
-              processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>'
+              processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>',
+                lengthMenu: "הצג _MENU_ רשומות",
+                search: "חיפוש:",
+                info:  "מציג _START_ עד _END_ מ-_TOTAL_ תוצאות",
+                paginate: {
+                    "first":      "ראשון",
+                    "last":       "אחרון",
+                    "next":       "הבא",
+                    "previous":   "קודם"
+                },
             },
             scroller: {
                 loadingIndicator: false
@@ -160,7 +121,7 @@
             },
             columns: [
                 /*{data:'serial_no', name: 'serial_no'},*/
-                {data:'name', name: 'name', orderable: false, searchable: false},
+                {data:'name', name: 'name', orderable: false, searchable: true},
                 {data:'email', name: 'email'},
                 {data:'roles', name: 'roles'},
                 {data:'permissions', name: 'permissions'},
@@ -169,61 +130,7 @@
 
             ],
             buttons: [
-                {
-                    extend: 'copy',
-                    className: 'btn-sm btn-info',
-                    title: 'Users',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'csv',
-                    className: 'btn-sm btn-success',
-                    title: 'Users',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn-sm btn-warning',
-                    title: 'Users',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible',
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn-sm btn-primary',
-                    title: 'Users',
-                    pageSize: 'A2',
-                    header: false,
-                    footer: true,
-                    exportOptions: {
-                        // columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    className: 'btn-sm btn-default',
-                    title: 'Users',
-                    // orientation:'landscape',
-                    pageSize: 'A2',
-                    header: true,
-                    footer: false,
-                    orientation: 'landscape',
-                    exportOptions: {
-                        // columns: ':visible',
-                        stripHtml: false
-                    }
-                }
+
             ],
             initComplete: function () {
                 var api =  this.api();

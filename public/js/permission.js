@@ -4,7 +4,7 @@
     $(document).ready(function()
     {
         var searchable = [];
-        var selectable = []; 
+        var selectable = [];
         var token = $('#token').val();
 
         var dTable = $('#permission_table').DataTable({
@@ -14,9 +14,17 @@
             processing: true,
             responsive: false,
             serverSide: true,
-            processing: true,
             language: {
-              processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>'
+                processing: '<i class="ace-icon fa fa-spinner fa-spin orange bigger-500" style="font-size:60px;margin-top:50px;"></i>',
+                lengthMenu: "הצג _MENU_ רשומות",
+                search: "חיפוש:",
+                info:  "מציג _START_ עד _END_ מ-_TOTAL_ תוצאות",
+                paginate: {
+                    "first":      "ראשון",
+                    "last":       "אחרון",
+                    "next":       "הבא",
+                    "previous":   "קודם"
+                },
             },
             scroller: {
                 loadingIndicator: false
@@ -39,7 +47,7 @@
             buttons: [
                 {
                     extend: 'copy',
-                    className: 'btn-sm btn-info', 
+                    className: 'btn-sm btn-info',
                     title: 'Permissions',
                     header: false,
                     footer: true,
@@ -93,7 +101,7 @@
                     }
                 }
             ],
-            /* 
+            /*
              * create an element id to change permission names, while inline datatable updated
             */
             createdRow: function ( row, data, index ) {
@@ -157,13 +165,13 @@
                     "type": "text",
                     "options": null
                 }
-                
+
             ]
         });
         //end of permission area
     });
     // datatable inline cell edit callback function
-    function updatePermission (updatedCell, updatedRow, oldValue) 
+    function updatePermission (updatedCell, updatedRow, oldValue)
     {
         var id = updatedRow.data().id;
         var name = updatedRow.data().name;
@@ -182,7 +190,7 @@
             {
                 $('#perm'+updatedRow.data().id).text(data.name);
                 updatedRow.data().name = data.name;
-                
+
             }
         });
     }

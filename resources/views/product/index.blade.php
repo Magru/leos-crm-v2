@@ -53,6 +53,9 @@
                                                         data-target="#fullwindowModal-{{ $count }}">
                                                     פרטים
                                                 </button>
+                                                <a href="edit/{{ $_prod->id }}" class="btn btn-info">
+                                                    ערוך
+                                                </a>
                                                 <div class="modal fade full-window-modal"
                                                      id="fullwindowModal-{{ $count }}"
                                                      tabindex="-1" role="dialog"

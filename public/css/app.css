@@ -11125,6 +11125,19 @@ select.form-control {
   background-color: #38c172;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  border: none;
+  background: transparent;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  float: right;
+}
+
+#monday_watcher .select2-search__field {
+  display: none !important;
+}
+
 .payment-title {
   width: 100%;
   text-align: center;

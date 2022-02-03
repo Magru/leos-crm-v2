@@ -22,4 +22,5 @@ class Product extends Model{
     public function deals(){
         return $this->belongsToMany(Deal::class);
     }
+
 }

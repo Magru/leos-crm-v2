@@ -15,7 +15,7 @@ class AddFieldsToDeals extends Migration
     {
         Schema::table('deals', function (Blueprint $table) {
             $table->string('type')->nullable();
-            $table->bigInteger('user_id')->unsigned();
+            //$table->bigInteger('user_id')->unsigned();
         });
     }
 

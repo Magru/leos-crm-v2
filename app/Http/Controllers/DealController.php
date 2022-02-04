@@ -202,11 +202,25 @@ class DealController extends Controller
             if ($monday_res) {
                 $deal->monday_pulse = $monday_res['create_item']['id'];
                 $pivot_products = $deal->products()->get();
+
                 if ($pivot_products) {
                     foreach ($pivot_products as $pp) {
                         $prod = Product::find($pp->pivot->product_id);
+                        $watchers = json_decode($prod->monday_watchers);
+                        $teams = [];
+                        if($watchers){
+                            foreach ($watchers as $_w){
+                                $teams[] = [
+                                    'id' => $_w,
+                                    'kind' => 'team'
+                                ];
+                            }
+                        }
                         $data = [
-                            'numbers' => $pp->pivot->qty
+                            'numbers' => $pp->pivot->qty,
+                            'person' => [
+                                'personsAndTeams' => $teams
+                            ]
                         ];
 
                         $subitem_res = $monday->addSubItemToItem($this->monday_deal_board, 'topics', $monday_res['create_item']['id'], $prod->name, $data);

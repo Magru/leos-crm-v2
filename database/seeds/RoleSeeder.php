@@ -14,12 +14,12 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
-            [
-                'id' => 1,
-                'name' => 'Super Admin',
-                'guard_name' => 'web',
-            ]
-        ]);
+//        DB::table('roles')->insert([
+//            [
+//                'id' => 1,
+//                'name' => 'Super Admin',
+//                'guard_name' => 'web',
+//            ]
+//        ]);
     }
 }

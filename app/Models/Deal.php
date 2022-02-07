@@ -29,6 +29,9 @@ class Deal extends Model implements HasMedia
     ];
 
 
+    protected $attributes = [
+        'date' => '1970-06-17 06:25:38',
+    ];
 
     protected $fillable = [
         'bid_number',
@@ -42,7 +45,8 @@ class Deal extends Model implements HasMedia
         'status',
         'total_price',
         'tax_total',
-        'payment_type'
+        'payment_type',
+        'date'
     ];
 
     public function client(){

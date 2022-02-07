@@ -314,7 +314,6 @@ class DealController extends Controller
                 $deal = Deal::firstOrCreate([
                     'gmail_msg_id' => $message_id
                 ], [
-                    'date' => date('Y-m-d', strtotime($message_meta['date'])),
                     'date' => Carbon::parse($message_meta['date'])->format('Y-m-d H:i:s'),
                     'type' => 'deal',
                     'bid_number' => 'na',

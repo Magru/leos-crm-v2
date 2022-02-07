@@ -101,6 +101,23 @@
                             </div>
                         </div>
 
+                        <div class="col-md-12 pb-4">
+                            <div class="card">
+                                <div class="card-header"><h3>מחיר</h3></div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">₪</div>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{ $product->price }}" name="price" id="price" placeholder="מחיר">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="col-md-12">
                             <div class="card">

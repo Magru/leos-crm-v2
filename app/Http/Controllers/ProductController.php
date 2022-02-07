@@ -34,6 +34,7 @@ class ProductController extends Controller{
 
         $name = $request->input('product-title');
         $note = $request->input('product-notes');
+        $price = $request->input('price');
         $product_data = $request->input('product-data');
         $data = null;
         if($product_data){
@@ -51,6 +52,7 @@ class ProductController extends Controller{
             'name' => $name,
             'notes' => $note ?: 'n/a',
             'data' => json_encode($data),
+            'price' => $price,
             'monday_watchers' => json_encode($request->input('monday_watcher'))
         ]);
 
@@ -88,6 +90,7 @@ class ProductController extends Controller{
         $product->name = $request->input('product-title');
         $product->notes = $request->input('product-notes');
         $product_data = $request->input('product-data');
+        $price = $request->input('price');
         $data = null;
         if($product_data){
             foreach ($product_data as $_d){
@@ -100,6 +103,7 @@ class ProductController extends Controller{
             }
         }
         $product->data = json_encode($data);
+        $product->price = $price;
         $product->monday_watchers = json_encode($request->input('monday_watcher'));
 
         $product->save();

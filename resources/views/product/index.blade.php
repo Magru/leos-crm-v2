@@ -29,6 +29,7 @@
                                         <th>כותרת</th>
                                         <th>תאריך יצירה במערכת</th>
                                         <th>שדות</th>
+                                        <th>מחלקות</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -44,6 +45,15 @@
                                                         {{ $dat['title'] }}
                                                     </span>
                                                 @endforeach
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($_prod->monday_watchers != null)
+                                                    @foreach (json_decode($_prod->monday_watchers, true) as $m)
+                                                        <span class="badge badge-pill badge-secondary">
+                                                        {{ \App\Models\MondayDep::where('monday_id', $m)->first()->title }}
+                                                    </span>
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td>
@@ -92,6 +102,8 @@
                                     <tr>
                                         <th>כותרת</th>
                                         <th>תאריך יצירה במערכת</th>
+                                        <th>שדות</th>
+                                        <th>מחלקות</th>
                                         <th></th>
                                     </tr>
                                     </tfoot>

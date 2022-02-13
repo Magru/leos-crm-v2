@@ -79,7 +79,8 @@ class ProductController extends Controller{
         return view('product.edit', [
             'product' => $product,
             'page_title' => 'עריכת מוצר',
-            'monday_watchers' => $monday_watchers
+            'monday_watchers' => $monday_watchers,
+            'selected_monday_watchers' => json_decode($product->monday_watchers, true)
         ]);
 
     }

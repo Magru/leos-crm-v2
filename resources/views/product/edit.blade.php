@@ -115,7 +115,7 @@
                                             <select class="form-control monday_watcher" required id="monday_watcher"
                                                     multiple="multiple" name="monday_watcher[]">
                                                 @foreach($monday_watchers as $m)
-                                                    <option value="{{ $m->monday_id }}">{{ $m->title }}</option>
+                                                    <option @if(in_array($m->monday_id, $selected_monday_watchers)) selected @endif value="{{ $m->monday_id }}">{{ $m->title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

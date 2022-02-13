@@ -177,7 +177,7 @@
                                                 </div>
 
                                                 <div class="product-attributes mt-3"  id="attr-for-{{ $product->id }}">
-                                                    @if($product->data !== 'null')
+                                                    @if($product->data !== null)
                                                         @foreach(json_decode($product->data, true) as $index => $_data)
                                                             <?php
                                                             $template = 'product.attributes.' . $_data['type'];

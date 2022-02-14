@@ -36,7 +36,9 @@ class ProductController extends Controller{
         $note = $request->input('product-notes');
         $price = $request->input('price');
         $product_data = $request->input('product-data');
+        $product_variations = $request->input('product-variations');
         $data = null;
+        $variations = null;
         if($product_data){
             foreach ($product_data as $_d){
                 if(isset($_d['data-name']) && isset($_d['data-type'])){
@@ -47,12 +49,24 @@ class ProductController extends Controller{
                 }
             }
         }
+        if($product_variations){
+            foreach ($product_variations as $_v){
+                if(isset($_v['data-name']) && isset($_v['data-price'])){
+                    $variations[] = [
+                        'title' => $_v['data-name'],
+                        'price' => $_v['data-price']
+                    ];
+                }
+            }
+        }
+
 
         $product = Product::create([
             'name' => $name,
             'notes' => $note ?: 'n/a',
             'data' => json_encode($data),
             'price' => $price,
+            'variations' => json_encode($variations),
             'monday_watchers' => json_encode($request->input('monday_watcher'))
         ]);
 

@@ -10,15 +10,17 @@
     });
 
 
-      $('.has-repeater').repeater({
-          show: function () {
-              $(this).slideDown();
-          },
-          hide: function (deleteElement) {
-              if(confirm('למחוק שורה ?')) {
-                  $(this).slideUp(deleteElement);
-              }
-          },
+      $('.has-repeater').each(function (){
+            $(this).repeater({
+                show: function () {
+                    $(this).slideDown();
+                },
+                hide: function (deleteElement) {
+                    if(confirm('למחוק שורה ?')) {
+                        $(this).slideUp(deleteElement);
+                    }
+                },
+            })
       });
 
 

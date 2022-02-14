@@ -12,7 +12,8 @@ class Product extends Model{
         'name',
         'data',
         'notes',
-        'price'
+        'price',
+        'variations'
     ];
 
     protected $attributes = [

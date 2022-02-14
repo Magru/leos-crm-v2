@@ -11138,8 +11138,8 @@ select.form-control {
   display: none !important;
 }
 
-.repeater input,
-.repeater select {
+.has-repeater input,
+.has-repeater select {
   height: 35px !important;
   margin-bottom: 5px;
 }

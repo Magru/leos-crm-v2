@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-12">
-                <form class="forms-sample has-repeater" method="POST" action="{{ route('product.store') }}"
+                <form class="forms-sample" method="POST" action="{{ route('product.store') }}"
                       enctype="multipart/form-data">
                     @csrf {{ csrf_field() }}
                     <div class="row justify-content-center">
@@ -30,7 +30,7 @@
                                     <div class="form-group col-sm-12 row">
                                         <label for="product-title" class="col-sm-3 col-form-label">כותרת</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" name="product-title" id="product-title">
+                                            <input type="text" required class="form-control" name="product-title" id="product-title">
                                         </div>
                                     </div>
                                 </div>
@@ -38,18 +38,18 @@
                         </div>
 
 
-                        <div class="col-md-12 pb-4">
+                        <div class="col-md-6 pb-4">
                             <div class="card">
                                 <div class="card-header"><h3>פרטי מוצר</h3></div>
                                 <div class="card-body">
-                                    <div class="form-group row">
-                                        <div data-repeater-list="product-data" class="pl-3 col-6">
+                                    <div class="form-group row has-repeater">
+                                        <div data-repeater-list="product-data" class="pl-3 col-12">
                                             <div data-repeater-item class="d-flex mb-2">
-                                                <div class="form-group mb-2 mr-sm-2 mb-sm-0">
-                                                    <input type="text" class="form-control" name="data-name"
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control mt-0" name="data-name"
                                                            placeholder="שם">
                                                 </div>
-                                                <div class="form-group mb-2 col-5 mr-sm-2 mb-sm-0">
+                                                <div class="form-group col-5">
                                                     <select name="data-type" class="form-control w-100">
                                                         <option value="" selected disabled>סוג</option>
                                                         <option value="date">תאריך</option>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 pb-4">
+                        <div class="col-md-6 pb-4">
                             <div class="card">
                                 <div class="card-header"><h3>מחלקות</h3></div>
                                 <div class="card-body">
@@ -89,12 +89,12 @@
                         </div>
 
 
-                        <div class="col-md-12 pb-4">
+                        <div class="col-md-4 pb-4">
                             <div class="card">
                                 <div class="card-header"><h3>מחיר</h3></div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="input-group mb-2 mr-sm-2">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">₪</div>
@@ -102,6 +102,34 @@
                                                 <input type="text" class="form-control" name="price" id="price" placeholder="מחיר">
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 pb-4">
+                            <div class="card">
+                                <div class="card-header"><h3>וריאציות</h3></div>
+                                <div class="card-body">
+                                    <div class="form-group row has-repeater">
+                                        <div data-repeater-list="product-variations" class="pl-3 col-12">
+                                            <div data-repeater-item class="d-flex mb-2">
+                                                <div class="form-group mb-2 col-7 mr-sm-2 mb-sm-0">
+                                                    <input type="text" class="form-control" name="data-name"
+                                                           placeholder="שם">
+                                                </div>
+                                                <div class="form-group mb-2 col-4 mr-sm-2 mb-sm-0">
+                                                    <input type="text" class="form-control" name="data-price"
+                                                           placeholder="מחיר">
+                                                </div>
+                                                <button data-repeater-delete type="button"
+                                                        class="btn btn-danger repeater-remove-btn btn-icon mr-2"><i
+                                                        class="ik ik-trash-2"></i></button>
+                                            </div>
+                                        </div>
+                                        <button data-repeater-create type="button"
+                                                class="btn btn-success btn-icon mr-2  repeater-add-btn"><i
+                                                class="ik ik-plus"></i></button>
                                     </div>
                                 </div>
                             </div>

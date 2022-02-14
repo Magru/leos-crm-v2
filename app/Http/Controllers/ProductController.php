@@ -94,7 +94,8 @@ class ProductController extends Controller{
             'product' => $product,
             'page_title' => 'עריכת מוצר',
             'monday_watchers' => $monday_watchers,
-            'selected_monday_watchers' => $product->monday_watchers ? json_decode($product->monday_watchers, true) : []
+            'selected_monday_watchers' => $product->monday_watchers ? json_decode($product->monday_watchers, true) : [],
+            'variations' => $product->variations ? json_decode($product->variations) : [],
         ]);
 
     }

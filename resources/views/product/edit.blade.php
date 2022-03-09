@@ -45,11 +45,11 @@
                                 <div class="card-header"><h3>פרטי מוצר</h3></div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <div data-repeater-list="product-data" class="pl-3 col-6 repeater">
+                                        <div data-repeater-list="product-data" class="pl-3 col-12 repeater">
                                             @if($product->data !== 'null')
                                                 @forelse(json_decode($product->data) as $d)
                                                     <div data-repeater-item class="d-flex mb-2">
-                                                        <div class="form-group mb-2 mr-sm-2 mb-sm-0">
+                                                        <div class="form-group col-5 mr-sm-2 mb-sm-0">
                                                             <input type="text" class="form-control mt-0"
                                                                    value="{{ $d->title }}"
                                                                    name="data-name"
